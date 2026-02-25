@@ -2,7 +2,8 @@
 #include <WiFi.h>
 #include <esp_wifi.h>
 
-#define FLASH_TRANMITTER_RECEIVER // Uncomment to flash
+// #define FLASH_RECEIVER_ONLY // Uncomment to flash
+#ifdef FLASH_RECEIVER_ONLY
 
 // ==========================================
 // CONFIGURATION
@@ -48,8 +49,6 @@ void ESPNOW_OnDataRecv(const esp_now_recv_info_t *recvInfo, const uint8_t *incom
   }
   Serial.printf("] | XYZ: %.2f, %.2f, %.2f\n", data.x, data.y, data.z);
 }
-
-#ifdef FLASH_TRANMITTER_RECEIVER
 
 void setup() {
   Serial.begin(115200);
@@ -97,4 +96,4 @@ void loop() {
   #endif
 }
 
-#endif
+#endif // End of FLASH_RECEIVER_ONLY

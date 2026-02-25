@@ -1,13 +1,15 @@
-#include <esp_now.h>
+// #include <esp_now.h>
+#include "esp_now.h"
 #include <WiFi.h>
 #include <esp_wifi.h>
 
-// #define FLASH_TRANMITTER_RECEIVER // Uncomment to flash
+#define FLASH_TRANMITTER_RECEIVER // Uncomment to flash
+#ifdef FLASH_TRANMITTER_RECEIVER
 
 // ==========================================
 // CONFIGURATION: Set the role of this device
 // ==========================================
-#define ROLE_TRANSMITTER    // Options: ROLE_TRANSMITTER, ROLE_RECEIVER
+#define ROLE_RECEIVER    // Options: ROLE_TRANSMITTER, ROLE_RECEIVER
 // ==========================================
 
 // MAC ADDRESSES
@@ -32,28 +34,25 @@ typedef struct struct_message {
 struct_message data;
 esp_now_peer_info_t ESPNOW_peerInfo = {};
 
-// Updated for ESP32 Core 3.x API
-void ESPNOW_OnDataSent(const wifi_tx_info_t *txInfo, esp_now_send_status_t status) {
+void ESPNOW_OnDataSent(const uint8_t *mac_addr, esp_now_send_status_t status) {
   Serial.print("Send Status: ");
   Serial.println(status == ESP_NOW_SEND_SUCCESS ? "Success" : "Fail");
 }
 
-// Updated for ESP32 Core 3.x API
+// Receive callback - Core 3.x signature
 void ESPNOW_OnDataRecv(const esp_now_recv_info_t *recvInfo, const uint8_t *incomingData, int len) {
   memcpy(&data, incomingData, sizeof(data));
-  Serial.printf("From: %02X:%02X:%02X | XYZ: %.2f, %.2f, %.2f\n", 
-                recvInfo->src_addr[0], recvInfo->src_addr[3], recvInfo->src_addr[5],
+  Serial.printf("From: %02X:%02X:%02X:%02X:%02X:%02X | XYZ: %.2f, %.2f, %.2f\n",
+                recvInfo->src_addr[0], recvInfo->src_addr[1], recvInfo->src_addr[2],
+                recvInfo->src_addr[3], recvInfo->src_addr[4], recvInfo->src_addr[5],
                 data.x, data.y, data.z);
 }
-
-#ifdef FLASH_TRANMITTER_RECEIVER
 
 void setup() {
   Serial.begin(115200);
   delay(1000); 
 
   WiFi.mode(WIFI_STA);
-  WiFi.STA.begin(); // Critical for waking up the hardware radio
   
   // Force same channel
   esp_wifi_set_channel(1, WIFI_SECOND_CHAN_NONE);
@@ -67,7 +66,7 @@ void setup() {
   }
 
   #if defined(ROLE_TRANSMITTER)
-    esp_now_register_send_cb(esp_now_send_cb_t(ESPNOW_OnDataSent));
+    esp_now_register_send_cb(ESPNOW_OnDataSent);
     
     memcpy(ESPNOW_peerInfo.peer_addr, targetAddress, 6);
     ESPNOW_peerInfo.channel = 0; // Use current channel
@@ -77,7 +76,7 @@ void setup() {
       Serial.println("Failed to add peer");
     }
   #else
-    esp_now_register_recv_cb(esp_now_recv_cb_t(ESPNOW_OnDataRecv));
+    esp_now_register_recv_cb(ESPNOW_OnDataRecv);
   #endif
 }
 

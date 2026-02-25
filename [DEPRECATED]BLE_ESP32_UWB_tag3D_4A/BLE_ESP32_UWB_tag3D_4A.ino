@@ -3,6 +3,9 @@
 // of four UWB anchors, labeled 1 to 4
 // S. James Remington 1/2022
 
+// #define FLASH_TAG_ESPNOW_TRANSMITTER
+#ifdef FLASH_TAG_ESPNOW_TRANSMITTER
+
 // This code does not average position measurements!
 
 #include <SPI.h>
@@ -232,3 +235,5 @@ int trilat3D_4A(void) {
 
   return 1;
 }  //end trilat3D_4A
+
+#endif // End of FLASH_TAG_ESPNOW_TRANSMITTER
