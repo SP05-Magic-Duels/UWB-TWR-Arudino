@@ -1,0 +1,13 @@
+[project]
+name = "v2"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "matplotlib>=3.10.8",
+    "numpy>=2.4.4",
+    "numpy-quaternion>=2024.0.13",
+    "pyserial>=3.5",
+    "snoop>=0.6.0",
+]
