@@ -1,0 +1,164 @@
+[
+  {
+    "added_include_path": "/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/cores/esp32"
+  },
+  {
+    "added_include_path": "/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/variants/esp32"
+  },
+  {
+    "compile": {
+      "source_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v2/build/sketch/main.ino.cpp",
+      "object_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v2/build/sketch/main.ino.cpp.o",
+      "depfile_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v2/build/sketch/main.ino.cpp.d"
+    },
+    "compile_task": {
+      "args": [
+        "/home/choafe/.arduino15/packages/esp32/tools/esp-x32/2511/bin/xtensa-esp32-elf-g++",
+        "-c",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/cpp_flags",
+        "-w",
+        "-Os",
+        "-Werror=return-type",
+        "-w",
+        "-x",
+        "c++",
+        "-E",
+        "-CC",
+        "-DF_CPU=240000000L",
+        "-DARDUINO=10607",
+        "-DARDUINO_ESP32_DEV",
+        "-DARDUINO_ARCH_ESP32",
+        "-DARDUINO_BOARD=\"ESP32_DEV\"",
+        "-DARDUINO_VARIANT=\"esp32\"",
+        "-DARDUINO_PARTITION_default",
+        "-DARDUINO_HOST_OS=\"linux\"",
+        "-DARDUINO_FQBN=\"esp32:esp32:esp32\"",
+        "-DESP32=ESP32",
+        "-DCORE_DEBUG_LEVEL=0",
+        "-DARDUINO_RUNNING_CORE=1",
+        "-DARDUINO_EVENT_RUNNING_CORE=1",
+        "-DARDUINO_USB_CDC_ON_BOOT=0",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/defines",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v2/main",
+        "-iprefix",
+        "/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/include/",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/includes",
+        "-I/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/qio_qspi/include",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/cores/esp32",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/variants/esp32",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v2/build/build_opt.h",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v2/build/file_opts",
+        "/home/choafe/Arduino/UWB-TWR-Arudino/v2/build/sketch/main.ino.cpp",
+        "-o",
+        "/dev/null"
+      ]
+    }
+  },
+  {
+    "missing_include_h": ""
+  },
+  {
+    "compile": {
+      "source_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v2/build/sketch/app.cpp",
+      "object_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v2/build/sketch/app.cpp.o",
+      "depfile_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v2/build/sketch/app.cpp.d"
+    },
+    "compile_task": {
+      "args": [
+        "/home/choafe/.arduino15/packages/esp32/tools/esp-x32/2511/bin/xtensa-esp32-elf-g++",
+        "-c",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/cpp_flags",
+        "-w",
+        "-Os",
+        "-Werror=return-type",
+        "-w",
+        "-x",
+        "c++",
+        "-E",
+        "-CC",
+        "-DF_CPU=240000000L",
+        "-DARDUINO=10607",
+        "-DARDUINO_ESP32_DEV",
+        "-DARDUINO_ARCH_ESP32",
+        "-DARDUINO_BOARD=\"ESP32_DEV\"",
+        "-DARDUINO_VARIANT=\"esp32\"",
+        "-DARDUINO_PARTITION_default",
+        "-DARDUINO_HOST_OS=\"linux\"",
+        "-DARDUINO_FQBN=\"esp32:esp32:esp32\"",
+        "-DESP32=ESP32",
+        "-DCORE_DEBUG_LEVEL=0",
+        "-DARDUINO_RUNNING_CORE=1",
+        "-DARDUINO_EVENT_RUNNING_CORE=1",
+        "-DARDUINO_USB_CDC_ON_BOOT=0",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/defines",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v2/main",
+        "-iprefix",
+        "/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/include/",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/includes",
+        "-I/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/qio_qspi/include",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/cores/esp32",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/variants/esp32",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v2/build/build_opt.h",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v2/build/file_opts",
+        "/home/choafe/Arduino/UWB-TWR-Arudino/v2/build/sketch/app.cpp",
+        "-o",
+        "/dev/null"
+      ]
+    }
+  },
+  {
+    "missing_include_h": ""
+  },
+  {
+    "compile": {
+      "source_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v2/build/sketch/app_main.cpp",
+      "object_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v2/build/sketch/app_main.cpp.o",
+      "depfile_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v2/build/sketch/app_main.cpp.d"
+    },
+    "compile_task": {
+      "args": [
+        "/home/choafe/.arduino15/packages/esp32/tools/esp-x32/2511/bin/xtensa-esp32-elf-g++",
+        "-c",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/cpp_flags",
+        "-w",
+        "-Os",
+        "-Werror=return-type",
+        "-w",
+        "-x",
+        "c++",
+        "-E",
+        "-CC",
+        "-DF_CPU=240000000L",
+        "-DARDUINO=10607",
+        "-DARDUINO_ESP32_DEV",
+        "-DARDUINO_ARCH_ESP32",
+        "-DARDUINO_BOARD=\"ESP32_DEV\"",
+        "-DARDUINO_VARIANT=\"esp32\"",
+        "-DARDUINO_PARTITION_default",
+        "-DARDUINO_HOST_OS=\"linux\"",
+        "-DARDUINO_FQBN=\"esp32:esp32:esp32\"",
+        "-DESP32=ESP32",
+        "-DCORE_DEBUG_LEVEL=0",
+        "-DARDUINO_RUNNING_CORE=1",
+        "-DARDUINO_EVENT_RUNNING_CORE=1",
+        "-DARDUINO_USB_CDC_ON_BOOT=0",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/defines",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v2/main",
+        "-iprefix",
+        "/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/include/",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/includes",
+        "-I/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/qio_qspi/include",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/cores/esp32",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/variants/esp32",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v2/build/build_opt.h",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v2/build/file_opts",
+        "/home/choafe/Arduino/UWB-TWR-Arudino/v2/build/sketch/app_main.cpp",
+        "-o",
+        "/dev/null"
+      ]
+    }
+  },
+  {
+    "missing_include_h": ""
+  }
+]
