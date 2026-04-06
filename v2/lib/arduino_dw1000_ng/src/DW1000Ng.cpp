@@ -45,9 +45,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#if defined(__AVR__)
-	#include <EEPROM.h>
-#endif
+#include <EEPROM.h>
 #include "DW1000Ng.hpp"
 #include "DW1000NgUtils.hpp"
 #include "DW1000NgConstants.hpp"
@@ -1715,25 +1713,23 @@ namespace DW1000Ng {
 		_writeAntennaDelayRegisters();
 	}
 
-	#if defined(__AVR__)
-		void setAndSaveAntennaDelay(uint16_t delay, uint8_t eeAddress) {
-			EEPROM.put(eeAddress, delay);
-			EEPROM.end();
-			setAntennaDelay(delay);
-		}
+	void setAndSaveAntennaDelay(uint16_t delay, uint8_t eeAddress) {
+		EEPROM.put(eeAddress, delay);
+		EEPROM.end();
+		setAntennaDelay(delay);
+	}
 
-		uint16_t getSavedAntennaDelay(uint8_t eeAddress) {
-			uint16_t delay;
-			EEPROM.get(eeAddress, delay);
-			EEPROM.end();
-			return delay;
-		}
+	uint16_t getSavedAntennaDelay(uint8_t eeAddress) {
+		uint16_t delay;
+		EEPROM.get(eeAddress, delay);
+		EEPROM.end();
+		return delay;
+	}
 
-		uint16_t setAntennaDelayFromEEPROM(uint8_t eeAddress) {
-			uint16_t delay = getSavedAntennaDelay(eeAddress);
-			setAntennaDelay(delay);
-		}
-	#endif
+	uint16_t setAntennaDelayFromEEPROM(uint8_t eeAddress) {
+		uint16_t delay = getSavedAntennaDelay(eeAddress);
+		setAntennaDelay(delay);
+	}
 
 	void setTxAntennaDelay(uint16_t value) {
 		_antennaTxDelay = value;

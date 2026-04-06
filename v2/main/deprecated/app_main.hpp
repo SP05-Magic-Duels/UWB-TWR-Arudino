@@ -31,6 +31,9 @@ public:
     char EUI[24]; // Extended Unique Identifier register. 64-bit device identifier. Register file: 0x01
     uint16_t networkId;
 
+    // Antenna delay if additional calibration is needed
+    uint16_t antenna_delay;
+
     Device(uint16_t deviceTypeID) {
         this->deviceTypeID = deviceTypeID;
         switch (deviceTypeID) {
@@ -38,31 +41,37 @@ public:
                 shortAddress = 1;
                 strcpy(EUI, "AA:BB:CC:DD:EE:FF:00:00");
                 networkId = RTLS_APP_ID;
+                antenna_delay = 0;
                 break;
             case ANCHOR_B:
                 shortAddress = 2;
                 strcpy(EUI, "AA:BB:CC:DD:EE:FF:00:01");
                 networkId = RTLS_APP_ID;
+                antenna_delay = 0;
                 break;
             case ANCHOR_C:
                 shortAddress = 3;
                 strcpy(EUI, "AA:BB:CC:DD:EE:FF:00:02");
                 networkId = RTLS_APP_ID;
+                antenna_delay = 0;
                 break;
             case ANCHOR_D:
                 shortAddress = 4;
                 strcpy(EUI, "AA:BB:CC:DD:EE:FF:00:03");
                 networkId = RTLS_APP_ID;
+                antenna_delay = 0;
                 break;
             case TAG_A:
                 shortAddress = 5;
                 strcpy(EUI, "AA:BB:CC:DD:EE:FF:00:04");
                 networkId = RTLS_APP_ID;
+                antenna_delay = 0;
                 break;
             case TAG_B:
                 shortAddress = 6;
                 strcpy(EUI, "AA:BB:CC:DD:EE:FF:00:05");
                 networkId = RTLS_APP_ID;
+                antenna_delay = 0;
                 break;
             default:
                 // Handle unknown device type
@@ -71,7 +80,7 @@ public:
     }
 };
 
-#define IS_ANCHOR // Comment out for Tag
+// #define IS_ANCHOR // Comment out for Tag
 static const Device ANCHOR(Device::ANCHOR_A);
 static const Device TAG(Device::TAG_A);
 
@@ -90,18 +99,25 @@ void app_setup() {
 
     DW1000Ng::applyConfiguration(DEFAULT_CONFIG);
     DW1000Ng::applySleepConfiguration(SLEEP_CONFIG);
-    DW1000Ng::setAntennaDelay(16436);
+    // DW1000Ng::setAntennaDelay(16436);
 
     #if defined(IS_ANCHOR)
         // DW1000Ng::enableFrameFiltering(ANCHOR_FRAME_FILTER_CONFIG);
         DW1000Ng::setDeviceAddress(ANCHOR.shortAddress);
         DW1000Ng::setEUI(ANCHOR.EUI);
         DW1000Ng::setNetworkId(ANCHOR.networkId);
+
+        DW1000Ng::setAntennaDelay(0);
+        // Setup _expectedMsgId type
+        _expectedMsgId = POLL_ACK;
     #else
         // DW1000Ng::enableFrameFiltering(TAG_FRAME_FILTER_CONFIG);
         DW1000Ng::setDeviceAddress(TAG.shortAddress);
         DW1000Ng::setEUI(TAG.EUI);
         DW1000Ng::setNetworkId(TAG.networkId);
+
+        // Setup _expectedMsgId type
+        _expectedMsgId = POLL;
     #endif
 
     // High timeouts to ensure the Tag-Centric handshake completes
@@ -109,10 +125,18 @@ void app_setup() {
     DW1000Ng::setSfdDetectionTimeout(273);
     DW1000Ng::setReceiveFrameWaitTimeoutPeriod(1500); 
 
-    Serial.println(F("Configuration Committed..."));
+    Serial.println(F("Setup complete! Starting loop..."));
 }
 
 void app_loop() {
+
+    // Calibration (set one device to 0 then divide by 2 for symmetric)
+    if (!_calibrationComplete) {
+        _calibrate();
+        DW1000Ng::setAndSaveAntennaDelay(ANCHOR.antenna_delay);
+        _calibrationComplete = true;
+    }
+
     #if defined(IS_ANCHOR)
         // Anchor loop
         // RangeAcceptResult_TC res = DW1000NgRTLS_TC::anchorRangeAccept(NextActivity::RANGING_CONFIRM, 0xFFFF);
@@ -130,37 +154,37 @@ void app_loop() {
         yield();
 
     #else
-        // Tag loop
-        RangeInfrastructureResult_TC res = DW1000NgRTLS_TC::tagTwrLocalize(1500);
+        // // Tag loop
+        // RangeInfrastructureResult_TC res = DW1000NgRTLS_TC::tagTwrLocalize(1500);
         
-        if(res.success) {
-            Serial.println(F("--- New Range Report Received ---"));
+        // if(res.success) {
+        //     Serial.println(F("--- New Range Report Received ---"));
             
-            for(int i = 0; i < 4; i++) {
-                // Only print slots that have a valid anchor ID
-                if(res.anchor_ids[i] != 0) {
-                    Serial.print(F("Anchor [0x"));
-                    Serial.print(res.anchor_ids[i], HEX);
-                    Serial.print(F("]: "));
-                    Serial.print(res.ranges[i]);
-                    Serial.println(F(" m"));
-                }
-            }
+        //     for(int i = 0; i < 4; i++) {
+        //         // Only print slots that have a valid anchor ID
+        //         if(res.anchor_ids[i] != 0) {
+        //             Serial.print(F("Anchor [0x"));
+        //             Serial.print(res.anchor_ids[i], HEX);
+        //             Serial.print(F("]: "));
+        //             Serial.print(res.ranges[i]);
+        //             Serial.println(F(" m"));
+        //         }
+        //     }
 
-            /* * TRILATERATION: 
-             * You can now call your math function right here on the tag!
-             * double x, y;
-             * calculatePosition(res.ranges, x, y); 
-             */
+        //     /* * TRILATERATION: 
+        //      * You can now call your math function right here on the tag!
+        //      * double x, y;
+        //      * calculatePosition(res.ranges, x, y); 
+        //      */
 
-            if(res.new_blink_rate > 0) blink_rate = res.new_blink_rate;
-        } else {
-            // Serial.println(F("Ranging failed or no anchors in range."));
-        }
-        Serial.println(res.success ? F("Tag ranging successful") : F("Tag ranging failed or no anchors in range"));
+        //     if(res.new_blink_rate > 0) blink_rate = res.new_blink_rate;
+        // } else {
+        //     // Serial.println(F("Ranging failed or no anchors in range."));
+        // }
+        // Serial.println(res.success ? F("Tag ranging successful") : F("Tag ranging failed or no anchors in range"));
 
-        delay(blink_rate); // Wait for next blink cycle
-        yield();
+        // delay(blink_rate); // Wait for next blink cycle
+        // yield();
 
     #endif
 }

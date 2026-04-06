@@ -55,47 +55,6 @@ const uint8_t PIN_RST = 27; // reset pin
 const uint8_t PIN_IRQ = 34; // irq pin
 const uint8_t PIN_SS  = 4;  // spi select pin
 
-/**
- * Message utility functions
- */
-
-#define POLL 0
-#define POLL_ACK 1
-#define RANGE 2
-#define RANGE_REPORT 3
-#define RANGE_FAILED 255
-
-// Message flow state
-volatile byte _expectedMsgId;
-
-// Message sent/received state
-volatile boolean _sentAck = false;
-volatile boolean _receivedAck = false;
-// Protocol error state
-boolean _protocolFailed = false;
-
-// Timestamps to remember
-uint64_t _timePollSent;
-uint64_t _timePollReceived;
-uint64_t _timePollAckSent;
-uint64_t _timePollAckReceived;
-uint64_t _timeRangeSent;
-uint64_t _timeRangeReceived;
-
-// Data buffer
-#define LEN_DATA 16
-byte _data[LEN_DATA];
-
-// Watchdog and reset period
-uint32_t _lastActivity;
-uint32_t _resetPeriod = 250;
-
-// Reply times (same on both sides for symm. ranging)
-uint16_t _replyDelayTimeUS = 3000;
-
-// Last computed range/time
-uint64_t _timeComputedRange;
-
 device_configuration_t DEFAULT_CONFIG = {
     false,
     true,
@@ -148,5 +107,5 @@ frame_filtering_configuration_t ANCHOR_FRAME_FILTER_CONFIG = {
     false,
     false,
     false,
-    true        /* This allows blink frames */
+    false   // no blink frames needed in tag-centric mode
 };
