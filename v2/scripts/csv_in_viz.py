@@ -33,7 +33,7 @@ ANCHOR_COORDS = np.array([ANCHORS[aid] for aid in ANCHOR_IDS])
 NUM_ANCHORS = len(ANCHOR_IDS)
 
 MAX_QUEUE = 200
-PLOT_LIMITS = (-1.0, 5.0)
+PLOT_LIMITS = (-0.250, 1.5)
 
 # ==========================================
 # TRILATERATION SOLVER
@@ -42,6 +42,7 @@ def solve_position(ranges, anchor_coords):
     """Calculates X,Y,Z coordinates from raw distances using Least Squares"""
     # Initial guess: start in the mathematical center of all anchors
     initial_guess = np.mean(anchor_coords, axis=0)
+    initial_guess[2] += 0.1 # Nudge Z slightly off-center to help the optimizer
 
     def error_function(guess):
         error = 0
@@ -51,8 +52,11 @@ def solve_position(ranges, anchor_coords):
             error += (dist - ranges[i])**2
         return error
 
+    # Force bounds using the box dimensions
+    bnds = ((-0.1, 1.0), (-0.1, 1.5), (0.0, 1.0))
+
     # Run the optimizer to find the coordinate with the lowest error
-    result = minimize(error_function, initial_guess, method='L-BFGS-B')
+    result = minimize(error_function, initial_guess, method='L-BFGS-B', bounds=bnds)
     return result.x
 
 # ==========================================
@@ -85,7 +89,7 @@ def data_reader():
             csv_line = ",".join([f"{r:.2f}" for r in mock_ranges])
             process_csv_line(csv_line)
             
-            time.sleep(0.05) # 20 Hz update rate
+            time.sleep(0.01) # 100 Hz update rate
     else:
         ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
         time.sleep(2)
@@ -125,7 +129,7 @@ def main():
     
     if PLOT_DIMENSIONS == 3:
         ax = fig.add_subplot(projection='3d')
-        ax.set_zlim(0, 3.0)
+        ax.set_zlim(0, 1.0)
         ax.set_zlabel("Z (meters)")
         ax.set_title("Real-Time 3D UWB Tracking")
     else:
@@ -200,7 +204,7 @@ def main():
         info_text.set_text(dist_text)
         return [tag_scatter, info_text] + list(dynamic_lines.values())
 
-    ani = FuncAnimation(fig, update, interval=50, cache_frame_data=False, blit=(PLOT_DIMENSIONS == 2))
+    ani = FuncAnimation(fig, update, interval=10, cache_frame_data=False, blit=(PLOT_DIMENSIONS == 2)) # interval=10 -> 100 FPS
 
     try:
         plt.show()
@@ -209,3 +213,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
