@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 import quaternion
 
-# ================= SETTINGS =================
 SERIAL_PORT = "COM9"
 BAUD_RATE = 115200
 MAX_QUEUE = 500
@@ -16,7 +15,7 @@ PLOT_WINDOW = 200
 AXIS_LEN = 0.8
 CALIBRATION_SAMPLES = 100 
 
-# ================= DATA STORAGE =================
+# DATA STORAGE
 imu_queue = deque(maxlen=MAX_QUEUE)
 
 # Deques for the 6 raw readings (used for Moving Average)
@@ -37,7 +36,7 @@ calib_buffer = []
 lp_acc = np.array([0.0, 0.0, 1.0])
 lp_gyro = np.array([0.0, 0.0, 0.0])
 
-# ================= KALMAN FILTER CLASS =================
+# KALMAN FILTER CLASS
 class KalmanFilter:
     def __init__(self, process_variance, measurement_variance, initial_value=0.0):
         self.Q = process_variance      # Environment noise
@@ -60,7 +59,7 @@ kf_gx = KalmanFilter(0.1, 10.0, 0.0)
 kf_gy = KalmanFilter(0.1, 10.0, 0.0)
 kf_gz = KalmanFilter(0.1, 10.0, 0.0)
 
-# ================= SERIAL =================
+# SERIAL
 def parse_imu_line(line):
     parts = [x.strip() for x in line.strip().split(",")]
     if len(parts) != 6: raise ValueError
@@ -80,7 +79,7 @@ def serial_reader():
         ser.close()
     except Exception as e: print(f"Serial Error: {e}")
 
-# ================= MATH HELPERS =================
+# QUATERNION TO ROTATION MATRIX
 def quat_to_rotmat(q):
     q = q.normalized()
     w, x, y, z = q.w, q.x, q.y, q.z
@@ -90,7 +89,7 @@ def quat_to_rotmat(q):
         [    2*(x*z - y*w),     2*(y*z + x*w), 1 - 2*(x*x + y*y)],
     ])
 
-# ================= MAIN DASHBOARD =================
+# MAIN DASHBOARD
 def main():
     global stop_flag, is_calibrated, gyro_bias, calib_buffer, lp_acc, lp_gyro
     q = np.quaternion(1, 0, 0, 0)
@@ -151,7 +150,7 @@ def main():
         raw_gyro = np.array([gx, gy, gz]) - gyro_bias
 
         # ==========================================================
-        # FILTER SWITCHBOARD
+        # FILTERING METHODS
         # ==========================================================
         
         # METHOD 1: KALMAN FILTER 
@@ -170,7 +169,7 @@ def main():
 
         # ==========================================================
 
-        # ORIENTATION FUSION (Complementary)
+        # ORIENTATION FUSION
         omega = np.deg2rad(final_gyro)
         acc_norm = np.linalg.norm(final_acc)
         if 0.95 < acc_norm < 1.05: 
