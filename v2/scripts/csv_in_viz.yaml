@@ -1,6 +1,11 @@
 settings:
+<<<<<<< HEAD
   use_mock_data: true       # Set to false to read from the ESP32
   serial_port: "COM31"       # Windows: "COM3", Mac/Linux: "/dev/ttyUSB0"
+=======
+  use_mock_data: false       # Set to false to read from the ESP32
+  serial_port: "/dev/ttyUSB1"       # Windows: "COM3", Mac/Linux: "/dev/ttyUSB0"
+>>>>>>> temp
   baud_rate: 115200
   plot_dimensions: 3        # 2 for 2D top-down, 3 for interactive 3D
 
@@ -14,6 +19,7 @@ settings:
 # Define your anchors. The order here dictates the CSV order!
 # CSV line: "Range_A0, Range_A1, Range_A2, Range_A3"
 anchors:
+<<<<<<< HEAD
   "A1": [0.7112, 1.3716, 0.6858]
   "A2": [0.0, 1.3716,  0.6858]
   "A3": [0.7112, 0.00, 0.6858]
@@ -22,3 +28,9 @@ anchors:
   "A6": [0.0254, 1.3716, 0]
   "A7": [0.6858, 0.00, 0]
   "A8": [0.00, 0.00, 0.00]
+=======
+  "A0": [1.7653, 0.0, 0]
+  "A1": [1.7653, 2.159, 0]
+  "A2": [0.0, 2.159, 0]
+  "A3": [0.0, 0.0, 0]
+>>>>>>> temp
