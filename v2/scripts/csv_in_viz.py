@@ -218,7 +218,12 @@ def main():
             ax.scatter(pos[0], pos[1], color='red', marker='^', s=120, zorder=5)
             ax.text(pos[0], pos[1] + 0.05, aid, color='red', weight='bold', ha='center')
 
-    tag_scatter, = ax.plot([], [], [] if PLOT_DIMENSIONS == 3 else None, marker='o', color='blue', markersize=14, linestyle='None', label='Tag', zorder=10)
+    # 2. Initialize Tag
+    if PLOT_DIMENSIONS == 3:
+        tag_scatter, = ax.plot([], [], [], marker='o', color='blue', markersize=14, linestyle='None', label='Tag', zorder=10)
+    else:
+        tag_scatter, = ax.plot([], [], marker='o', color='blue', markersize=14, linestyle='None', label='Tag', zorder=10)
+        
     dynamic_lines = {}
     ax.legend(loc="upper right")
 
