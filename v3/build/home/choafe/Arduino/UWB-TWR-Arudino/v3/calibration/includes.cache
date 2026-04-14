@@ -1,0 +1,551 @@
+[
+  {
+    "added_include_path": "/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/cores/esp32"
+  },
+  {
+    "added_include_path": "/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/variants/esp32"
+  },
+  {
+    "compile": {
+      "source_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/sketch/calibration.ino.cpp",
+      "object_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/sketch/calibration.ino.cpp.o",
+      "depfile_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/sketch/calibration.ino.cpp.d"
+    },
+    "compile_task": {
+      "args": [
+        "/home/choafe/.arduino15/packages/esp32/tools/esp-x32/2511/bin/xtensa-esp32-elf-g++",
+        "-c",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/cpp_flags",
+        "-w",
+        "-Os",
+        "-Werror=return-type",
+        "-w",
+        "-x",
+        "c++",
+        "-E",
+        "-CC",
+        "-DF_CPU=240000000L",
+        "-DARDUINO=10607",
+        "-DARDUINO_ESP32_DEV",
+        "-DARDUINO_ARCH_ESP32",
+        "-DARDUINO_BOARD=\"ESP32_DEV\"",
+        "-DARDUINO_VARIANT=\"esp32\"",
+        "-DARDUINO_PARTITION_default",
+        "-DARDUINO_HOST_OS=\"linux\"",
+        "-DARDUINO_FQBN=\"esp32:esp32:esp32\"",
+        "-DESP32=ESP32",
+        "-DCORE_DEBUG_LEVEL=0",
+        "-DARDUINO_RUNNING_CORE=1",
+        "-DARDUINO_EVENT_RUNNING_CORE=1",
+        "-DARDUINO_USB_CDC_ON_BOOT=0",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/defines",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration",
+        "-iprefix",
+        "/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/include/",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/includes",
+        "-I/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/qio_qspi/include",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/cores/esp32",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/variants/esp32",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/build_opt.h",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/file_opts",
+        "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/sketch/calibration.ino.cpp",
+        "-o",
+        "/dev/null"
+      ]
+    }
+  },
+  {
+    "missing_include_h": "DW1000Ng.hpp"
+  },
+  {
+    "added_include_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src"
+  },
+  {
+    "compile": {
+      "source_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/sketch/calibration.ino.cpp",
+      "object_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/sketch/calibration.ino.cpp.o",
+      "depfile_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/sketch/calibration.ino.cpp.d"
+    },
+    "compile_task": {
+      "args": [
+        "/home/choafe/.arduino15/packages/esp32/tools/esp-x32/2511/bin/xtensa-esp32-elf-g++",
+        "-c",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/cpp_flags",
+        "-w",
+        "-Os",
+        "-Werror=return-type",
+        "-w",
+        "-x",
+        "c++",
+        "-E",
+        "-CC",
+        "-DF_CPU=240000000L",
+        "-DARDUINO=10607",
+        "-DARDUINO_ESP32_DEV",
+        "-DARDUINO_ARCH_ESP32",
+        "-DARDUINO_BOARD=\"ESP32_DEV\"",
+        "-DARDUINO_VARIANT=\"esp32\"",
+        "-DARDUINO_PARTITION_default",
+        "-DARDUINO_HOST_OS=\"linux\"",
+        "-DARDUINO_FQBN=\"esp32:esp32:esp32\"",
+        "-DESP32=ESP32",
+        "-DCORE_DEBUG_LEVEL=0",
+        "-DARDUINO_RUNNING_CORE=1",
+        "-DARDUINO_EVENT_RUNNING_CORE=1",
+        "-DARDUINO_USB_CDC_ON_BOOT=0",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/defines",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration",
+        "-iprefix",
+        "/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/include/",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/includes",
+        "-I/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/qio_qspi/include",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/cores/esp32",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/variants/esp32",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/build_opt.h",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/file_opts",
+        "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/sketch/calibration.ino.cpp",
+        "-o",
+        "/dev/null"
+      ]
+    }
+  },
+  {
+    "missing_include_h": "SPI.h"
+  },
+  {
+    "added_include_path": "/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/libraries/SPI/src"
+  },
+  {
+    "compile": {
+      "source_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/sketch/calibration.ino.cpp",
+      "object_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/sketch/calibration.ino.cpp.o",
+      "depfile_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/sketch/calibration.ino.cpp.d"
+    },
+    "compile_task": {
+      "args": [
+        "/home/choafe/.arduino15/packages/esp32/tools/esp-x32/2511/bin/xtensa-esp32-elf-g++",
+        "-c",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/cpp_flags",
+        "-w",
+        "-Os",
+        "-Werror=return-type",
+        "-w",
+        "-x",
+        "c++",
+        "-E",
+        "-CC",
+        "-DF_CPU=240000000L",
+        "-DARDUINO=10607",
+        "-DARDUINO_ESP32_DEV",
+        "-DARDUINO_ARCH_ESP32",
+        "-DARDUINO_BOARD=\"ESP32_DEV\"",
+        "-DARDUINO_VARIANT=\"esp32\"",
+        "-DARDUINO_PARTITION_default",
+        "-DARDUINO_HOST_OS=\"linux\"",
+        "-DARDUINO_FQBN=\"esp32:esp32:esp32\"",
+        "-DESP32=ESP32",
+        "-DCORE_DEBUG_LEVEL=0",
+        "-DARDUINO_RUNNING_CORE=1",
+        "-DARDUINO_EVENT_RUNNING_CORE=1",
+        "-DARDUINO_USB_CDC_ON_BOOT=0",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/defines",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration",
+        "-iprefix",
+        "/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/include/",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/includes",
+        "-I/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/qio_qspi/include",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/cores/esp32",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/variants/esp32",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/libraries/SPI/src",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/build_opt.h",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/file_opts",
+        "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/sketch/calibration.ino.cpp",
+        "-o",
+        "/dev/null"
+      ]
+    }
+  },
+  {
+    "missing_include_h": ""
+  },
+  {
+    "compile": {
+      "source_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src/DW1000Ng.cpp",
+      "object_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/libraries/arduino_dw1000_ng/DW1000Ng.cpp.o",
+      "depfile_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/libraries/arduino_dw1000_ng/DW1000Ng.cpp.d"
+    },
+    "compile_task": {
+      "args": [
+        "/home/choafe/.arduino15/packages/esp32/tools/esp-x32/2511/bin/xtensa-esp32-elf-g++",
+        "-c",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/cpp_flags",
+        "-w",
+        "-Os",
+        "-Werror=return-type",
+        "-w",
+        "-x",
+        "c++",
+        "-E",
+        "-CC",
+        "-DF_CPU=240000000L",
+        "-DARDUINO=10607",
+        "-DARDUINO_ESP32_DEV",
+        "-DARDUINO_ARCH_ESP32",
+        "-DARDUINO_BOARD=\"ESP32_DEV\"",
+        "-DARDUINO_VARIANT=\"esp32\"",
+        "-DARDUINO_PARTITION_default",
+        "-DARDUINO_HOST_OS=\"linux\"",
+        "-DARDUINO_FQBN=\"esp32:esp32:esp32\"",
+        "-DESP32=ESP32",
+        "-DCORE_DEBUG_LEVEL=0",
+        "-DARDUINO_RUNNING_CORE=1",
+        "-DARDUINO_EVENT_RUNNING_CORE=1",
+        "-DARDUINO_USB_CDC_ON_BOOT=0",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/defines",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration",
+        "-iprefix",
+        "/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/include/",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/includes",
+        "-I/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/qio_qspi/include",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/cores/esp32",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/variants/esp32",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/libraries/SPI/src",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/build_opt.h",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/file_opts",
+        "/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src/DW1000Ng.cpp",
+        "-o",
+        "/dev/null"
+      ]
+    }
+  },
+  {
+    "missing_include_h": ""
+  },
+  {
+    "compile": {
+      "source_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src/DW1000NgRTLS.cpp",
+      "object_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/libraries/arduino_dw1000_ng/DW1000NgRTLS.cpp.o",
+      "depfile_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/libraries/arduino_dw1000_ng/DW1000NgRTLS.cpp.d"
+    },
+    "compile_task": {
+      "args": [
+        "/home/choafe/.arduino15/packages/esp32/tools/esp-x32/2511/bin/xtensa-esp32-elf-g++",
+        "-c",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/cpp_flags",
+        "-w",
+        "-Os",
+        "-Werror=return-type",
+        "-w",
+        "-x",
+        "c++",
+        "-E",
+        "-CC",
+        "-DF_CPU=240000000L",
+        "-DARDUINO=10607",
+        "-DARDUINO_ESP32_DEV",
+        "-DARDUINO_ARCH_ESP32",
+        "-DARDUINO_BOARD=\"ESP32_DEV\"",
+        "-DARDUINO_VARIANT=\"esp32\"",
+        "-DARDUINO_PARTITION_default",
+        "-DARDUINO_HOST_OS=\"linux\"",
+        "-DARDUINO_FQBN=\"esp32:esp32:esp32\"",
+        "-DESP32=ESP32",
+        "-DCORE_DEBUG_LEVEL=0",
+        "-DARDUINO_RUNNING_CORE=1",
+        "-DARDUINO_EVENT_RUNNING_CORE=1",
+        "-DARDUINO_USB_CDC_ON_BOOT=0",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/defines",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration",
+        "-iprefix",
+        "/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/include/",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/includes",
+        "-I/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/qio_qspi/include",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/cores/esp32",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/variants/esp32",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/libraries/SPI/src",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/build_opt.h",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/file_opts",
+        "/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src/DW1000NgRTLS.cpp",
+        "-o",
+        "/dev/null"
+      ]
+    }
+  },
+  {
+    "missing_include_h": ""
+  },
+  {
+    "compile": {
+      "source_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src/DW1000NgRanging.cpp",
+      "object_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/libraries/arduino_dw1000_ng/DW1000NgRanging.cpp.o",
+      "depfile_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/libraries/arduino_dw1000_ng/DW1000NgRanging.cpp.d"
+    },
+    "compile_task": {
+      "args": [
+        "/home/choafe/.arduino15/packages/esp32/tools/esp-x32/2511/bin/xtensa-esp32-elf-g++",
+        "-c",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/cpp_flags",
+        "-w",
+        "-Os",
+        "-Werror=return-type",
+        "-w",
+        "-x",
+        "c++",
+        "-E",
+        "-CC",
+        "-DF_CPU=240000000L",
+        "-DARDUINO=10607",
+        "-DARDUINO_ESP32_DEV",
+        "-DARDUINO_ARCH_ESP32",
+        "-DARDUINO_BOARD=\"ESP32_DEV\"",
+        "-DARDUINO_VARIANT=\"esp32\"",
+        "-DARDUINO_PARTITION_default",
+        "-DARDUINO_HOST_OS=\"linux\"",
+        "-DARDUINO_FQBN=\"esp32:esp32:esp32\"",
+        "-DESP32=ESP32",
+        "-DCORE_DEBUG_LEVEL=0",
+        "-DARDUINO_RUNNING_CORE=1",
+        "-DARDUINO_EVENT_RUNNING_CORE=1",
+        "-DARDUINO_USB_CDC_ON_BOOT=0",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/defines",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration",
+        "-iprefix",
+        "/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/include/",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/includes",
+        "-I/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/qio_qspi/include",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/cores/esp32",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/variants/esp32",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/libraries/SPI/src",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/build_opt.h",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/file_opts",
+        "/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src/DW1000NgRanging.cpp",
+        "-o",
+        "/dev/null"
+      ]
+    }
+  },
+  {
+    "missing_include_h": ""
+  },
+  {
+    "compile": {
+      "source_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src/DW1000NgTime.cpp",
+      "object_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/libraries/arduino_dw1000_ng/DW1000NgTime.cpp.o",
+      "depfile_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/libraries/arduino_dw1000_ng/DW1000NgTime.cpp.d"
+    },
+    "compile_task": {
+      "args": [
+        "/home/choafe/.arduino15/packages/esp32/tools/esp-x32/2511/bin/xtensa-esp32-elf-g++",
+        "-c",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/cpp_flags",
+        "-w",
+        "-Os",
+        "-Werror=return-type",
+        "-w",
+        "-x",
+        "c++",
+        "-E",
+        "-CC",
+        "-DF_CPU=240000000L",
+        "-DARDUINO=10607",
+        "-DARDUINO_ESP32_DEV",
+        "-DARDUINO_ARCH_ESP32",
+        "-DARDUINO_BOARD=\"ESP32_DEV\"",
+        "-DARDUINO_VARIANT=\"esp32\"",
+        "-DARDUINO_PARTITION_default",
+        "-DARDUINO_HOST_OS=\"linux\"",
+        "-DARDUINO_FQBN=\"esp32:esp32:esp32\"",
+        "-DESP32=ESP32",
+        "-DCORE_DEBUG_LEVEL=0",
+        "-DARDUINO_RUNNING_CORE=1",
+        "-DARDUINO_EVENT_RUNNING_CORE=1",
+        "-DARDUINO_USB_CDC_ON_BOOT=0",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/defines",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration",
+        "-iprefix",
+        "/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/include/",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/includes",
+        "-I/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/qio_qspi/include",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/cores/esp32",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/variants/esp32",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/libraries/SPI/src",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/build_opt.h",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/file_opts",
+        "/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src/DW1000NgTime.cpp",
+        "-o",
+        "/dev/null"
+      ]
+    }
+  },
+  {
+    "missing_include_h": ""
+  },
+  {
+    "compile": {
+      "source_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src/DW1000NgUtils.cpp",
+      "object_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/libraries/arduino_dw1000_ng/DW1000NgUtils.cpp.o",
+      "depfile_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/libraries/arduino_dw1000_ng/DW1000NgUtils.cpp.d"
+    },
+    "compile_task": {
+      "args": [
+        "/home/choafe/.arduino15/packages/esp32/tools/esp-x32/2511/bin/xtensa-esp32-elf-g++",
+        "-c",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/cpp_flags",
+        "-w",
+        "-Os",
+        "-Werror=return-type",
+        "-w",
+        "-x",
+        "c++",
+        "-E",
+        "-CC",
+        "-DF_CPU=240000000L",
+        "-DARDUINO=10607",
+        "-DARDUINO_ESP32_DEV",
+        "-DARDUINO_ARCH_ESP32",
+        "-DARDUINO_BOARD=\"ESP32_DEV\"",
+        "-DARDUINO_VARIANT=\"esp32\"",
+        "-DARDUINO_PARTITION_default",
+        "-DARDUINO_HOST_OS=\"linux\"",
+        "-DARDUINO_FQBN=\"esp32:esp32:esp32\"",
+        "-DESP32=ESP32",
+        "-DCORE_DEBUG_LEVEL=0",
+        "-DARDUINO_RUNNING_CORE=1",
+        "-DARDUINO_EVENT_RUNNING_CORE=1",
+        "-DARDUINO_USB_CDC_ON_BOOT=0",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/defines",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration",
+        "-iprefix",
+        "/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/include/",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/includes",
+        "-I/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/qio_qspi/include",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/cores/esp32",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/variants/esp32",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/libraries/SPI/src",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/build_opt.h",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/file_opts",
+        "/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src/DW1000NgUtils.cpp",
+        "-o",
+        "/dev/null"
+      ]
+    }
+  },
+  {
+    "missing_include_h": ""
+  },
+  {
+    "compile": {
+      "source_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src/SPIporting.cpp",
+      "object_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/libraries/arduino_dw1000_ng/SPIporting.cpp.o",
+      "depfile_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/libraries/arduino_dw1000_ng/SPIporting.cpp.d"
+    },
+    "compile_task": {
+      "args": [
+        "/home/choafe/.arduino15/packages/esp32/tools/esp-x32/2511/bin/xtensa-esp32-elf-g++",
+        "-c",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/cpp_flags",
+        "-w",
+        "-Os",
+        "-Werror=return-type",
+        "-w",
+        "-x",
+        "c++",
+        "-E",
+        "-CC",
+        "-DF_CPU=240000000L",
+        "-DARDUINO=10607",
+        "-DARDUINO_ESP32_DEV",
+        "-DARDUINO_ARCH_ESP32",
+        "-DARDUINO_BOARD=\"ESP32_DEV\"",
+        "-DARDUINO_VARIANT=\"esp32\"",
+        "-DARDUINO_PARTITION_default",
+        "-DARDUINO_HOST_OS=\"linux\"",
+        "-DARDUINO_FQBN=\"esp32:esp32:esp32\"",
+        "-DESP32=ESP32",
+        "-DCORE_DEBUG_LEVEL=0",
+        "-DARDUINO_RUNNING_CORE=1",
+        "-DARDUINO_EVENT_RUNNING_CORE=1",
+        "-DARDUINO_USB_CDC_ON_BOOT=0",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/defines",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration",
+        "-iprefix",
+        "/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/include/",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/includes",
+        "-I/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/qio_qspi/include",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/cores/esp32",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/variants/esp32",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/libraries/SPI/src",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/build_opt.h",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/file_opts",
+        "/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src/SPIporting.cpp",
+        "-o",
+        "/dev/null"
+      ]
+    }
+  },
+  {
+    "missing_include_h": ""
+  },
+  {
+    "compile": {
+      "source_path": "/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/libraries/SPI/src/SPI.cpp",
+      "object_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/libraries/SPI/SPI.cpp.o",
+      "depfile_path": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/libraries/SPI/SPI.cpp.d"
+    },
+    "compile_task": {
+      "args": [
+        "/home/choafe/.arduino15/packages/esp32/tools/esp-x32/2511/bin/xtensa-esp32-elf-g++",
+        "-c",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/cpp_flags",
+        "-w",
+        "-Os",
+        "-Werror=return-type",
+        "-w",
+        "-x",
+        "c++",
+        "-E",
+        "-CC",
+        "-DF_CPU=240000000L",
+        "-DARDUINO=10607",
+        "-DARDUINO_ESP32_DEV",
+        "-DARDUINO_ARCH_ESP32",
+        "-DARDUINO_BOARD=\"ESP32_DEV\"",
+        "-DARDUINO_VARIANT=\"esp32\"",
+        "-DARDUINO_PARTITION_default",
+        "-DARDUINO_HOST_OS=\"linux\"",
+        "-DARDUINO_FQBN=\"esp32:esp32:esp32\"",
+        "-DESP32=ESP32",
+        "-DCORE_DEBUG_LEVEL=0",
+        "-DARDUINO_RUNNING_CORE=1",
+        "-DARDUINO_EVENT_RUNNING_CORE=1",
+        "-DARDUINO_USB_CDC_ON_BOOT=0",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/defines",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration",
+        "-iprefix",
+        "/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/include/",
+        "@/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/flags/includes",
+        "-I/home/choafe/.arduino15/packages/esp32/tools/esp32-libs/3.3.7/qio_qspi/include",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/cores/esp32",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/variants/esp32",
+        "-I/home/choafe/Arduino/UWB-TWR-Arudino/v3/lib/arduino_dw1000_ng/src",
+        "-I/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/libraries/SPI/src",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/build_opt.h",
+        "@/home/choafe/Arduino/UWB-TWR-Arudino/v3/build/home/choafe/Arduino/UWB-TWR-Arudino/v3/calibration/file_opts",
+        "/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7/libraries/SPI/src/SPI.cpp",
+        "-o",
+        "/dev/null"
+      ]
+    }
+  },
+  {
+    "missing_include_h": ""
+  }
+]

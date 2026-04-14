@@ -1,0 +1,111 @@
+{
+  "version": "2.0.0",
+  "inputs": [
+    {
+      "id": "espPort",
+      "type": "pickString",
+      "description": "Select ESP32 serial port",
+      "options": [
+        {
+          "label": "ESP32 on /dev/ttyUSB0",
+          "value": "/dev/ttyUSB0"
+        },
+        {
+          "label": "ESP32 on /dev/ttyUSB1",
+          "value": "/dev/ttyUSB1"
+        }
+      ],
+      "default": "/dev/ttyUSB0"
+    },
+    {
+      "id": "sketchFolder",
+      "type": "pickString",
+      "description": "Select repository folder to build/upload",
+      "options": [
+        {
+          "label": "main",
+          "value": "${workspaceFolder}/main"
+        },
+        {
+          "label": "calibration",
+          "value": "${workspaceFolder}/calibration"
+        }
+      ],
+      "default": "${workspaceFolder}/main"
+    }
+  ],
+  "tasks": [
+    {
+      "label": "ESP32: Board List",
+      "type": "shell",
+      "command": "arduino-cli",
+      "args": ["board", "list"],
+      "problemMatcher": []
+    },
+    {
+      "label": "ESP32: Install Core",
+      "type": "shell",
+      "command": "arduino-cli",
+      "args": ["core", "install", "esp32:esp32"],
+      "problemMatcher": []
+    },
+    {
+      "label": "ESP32: Compile",
+      "type": "shell",
+      "command": "arduino-cli",
+      "args": [
+        "compile",
+        "--fqbn",
+        "esp32:esp32:esp32",
+        "--libraries",
+        "${workspaceFolder}/lib",
+        "${input:sketchFolder}"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "ESP32: Upload",
+      "type": "shell",
+      "command": "arduino-cli",
+      "args": [
+        "upload",
+        "-p",
+        "${input:espPort}",
+        "--fqbn",
+        "esp32:esp32:esp32",
+        "${input:sketchFolder}"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "ESP32: Compile and Upload",
+      "dependsOrder": "sequence",
+      "dependsOn": [
+        "ESP32: Compile",
+        "ESP32: Upload"
+      ],
+      "problemMatcher": []
+    },
+    {
+      "label": "ESP32: Refresh IntelliSense",
+      "type": "shell",
+      "command": "arduino-cli",
+      "args": [
+        "compile",
+        "--fqbn",
+        "esp32:esp32:esp32",
+        "--libraries",
+        "${workspaceFolder}/lib",
+        "--build-path",
+        "${workspaceFolder}/build",
+        "--only-compilation-database",
+        "${input:sketchFolder}"
+      ],
+      "problemMatcher": []
+    }
+  ]
+}
