@@ -42,46 +42,50 @@ def main():
         while True:
             if ser.in_waiting > 0:
                 # 2. DRAIN THE BUFFER: Rapidly read all lines until the buffer is empty
-                while ser.in_waiting > 0:
-                    line = ser.readline().decode('utf-8', errors='ignore').strip()
+                if ser.in_waiting > 200:
+                    ser.reset_input_buffer()
+                    ser.readline() # Read and discard the first partial line that got chopped
+                    continue       # Skip to the next loop iteration to get fresh data
                 
-                    # 3. Now 'line' contains the absolute newest, real-time message!
-                    if line.startswith("ML_DATA"):
-                        parts = line.split(",")
-                        
-                        if len(parts) == 5:
-                            try:
-                                raw_dist = float(parts[1])
-                                rx_pwr = float(parts[2])
-                                fp_pwr = float(parts[3])
-                                quality = float(parts[4])
-                                
-                                pwr_diff = abs(rx_pwr - fp_pwr)
-                                live_data = [[raw_dist, rx_pwr, fp_pwr, pwr_diff, quality]]
-                                
-                                # 1. Ask the AI how wrong the raw distance is right now
-                                predicted_error = ai_model.predict(live_data)[0]
+                line = ser.readline().decode('utf-8', errors='ignore').strip()
+            
+                # 3. Now 'line' contains the absolute newest, real-time message!
+                if line.startswith("ML_DATA"):
+                    parts = line.split(",")
+                    
+                    if len(parts) == 5:
+                        try:
+                            raw_dist = float(parts[1])
+                            rx_pwr = float(parts[2])
+                            fp_pwr = float(parts[3])
+                            quality = float(parts[4])
+                            
+                            pwr_diff = abs(rx_pwr - fp_pwr)
+                            live_data = [[raw_dist, rx_pwr, fp_pwr, pwr_diff, quality]]
+                            
+                            # 1. Ask the AI how wrong the raw distance is right now
+                            predicted_error = ai_model.predict(live_data)[0]
 
-                                # 2. Apply the Exponential Moving Average to the predicted error
-                                if smoothed_error is None:
-                                    smoothed_error = predicted_error # Initialize on first run
-                                else:
-                                    smoothed_error = (SMOOTHING_FACTOR * predicted_error) + ((1 - SMOOTHING_FACTOR) * smoothed_error)
+                            # 2. Apply the Exponential Moving Average to the predicted error
+                            if smoothed_error is None:
+                                smoothed_error = predicted_error # Initialize on first run
+                            else:
+                                smoothed_error = (SMOOTHING_FACTOR * predicted_error) + ((1 - SMOOTHING_FACTOR) * smoothed_error)
 
-                                # 2. Apply that correction to the raw, smoothly changing UWB distance
-                                corrected_distance = raw_dist + smoothed_error
+                            # 2. Apply that correction to the raw, smoothly changing UWB distance
+                            corrected_distance = raw_dist + smoothed_error
 
-                                corrected_distance_in = corrected_distance * 39.3701
-                                raw_distance_in = raw_dist * 39.3701
-                                
-                                # Print the comparison
-                                print(f"{raw_distance_in:>10.2f} in   | {pwr_diff:>10.2f} dBm   | {corrected_distance_in:>18.2f} in")
+                            corrected_distance_in = corrected_distance * 39.3701
+                            raw_distance_in = raw_dist * 39.3701
+                            
+                            # Print the comparison
+                            print(f"{raw_distance_in:>10.2f} in   | {pwr_diff:>10.2f} dBm   | {corrected_distance_in:>18.2f} in")
 
-                                # NOTE: In your final project, you would pass 'corrected_distance' 
-                                # directly to your trilateration solver right here!
+                            # NOTE: In your final project, you would pass 'corrected_distance' 
+                            # directly to your trilateration solver right here!
 
-                            except ValueError:
-                                pass # Ignore corrupted serial lines
+                        except ValueError:
+                            pass # Ignore corrupted serial lines
                
                             
     except serial.SerialException:
