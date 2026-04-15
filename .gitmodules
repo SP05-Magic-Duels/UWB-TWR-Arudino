@@ -1,0 +1,6 @@
+[submodule "v3/ewine"]
+	path = v3/ewine
+	url = git@github.com:ewine-project/UWB-LOS-NLOS-Data-Set.git
+[submodule "v3/nlos/ewine"]
+	path = v3/nlos/ewine
+	url = git@github.com:ewine-project/UWB-LOS-NLOS-Data-Set.git
