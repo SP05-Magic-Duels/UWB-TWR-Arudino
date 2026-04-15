@@ -5,8 +5,8 @@ import time
 
 # --- CONFIGURATION ---
 # Change this to match your Arduino's serial port (e.g., 'COM3' on Windows, '/dev/ttyUSB0' on Mac/Linux)
-SERIAL_PORT = 'COM3' 
-BAUD_RATE = 115200
+SERIAL_PORT = 'COM13' 
+BAUD_RATE = 921600
 CSV_FILENAME = 'training_data.csv'
 # ---------------------
 
@@ -15,7 +15,7 @@ def main():
     
     # Ask the user for the physical ground-truth distance for this session
     try:
-        true_distance = float(input("Enter the TRUE physical distance (in meters) for this recording session: "))
+        true_distance = 0.0254 * float(input("Enter the TRUE physical distance (in inches) for this recording session: "))
     except ValueError:
         print("Invalid input. Please enter a number.")
         return
