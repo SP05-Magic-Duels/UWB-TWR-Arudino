@@ -1,0 +1,11 @@
+This folder contains stuff from testing 1D ranging with ML correction.
+
+To use it:
+
+1. Flash the tag with TwoWayRangingInitiator2.ino (I just use Arduino IDE)
+2. Flast the anchor with TwoWayRangingResponder2.ino
+3. (Optional) Use collect_training_data.py to add samples to training_data.csv. The data gets appended, so there's already some there
+4. (Optional) Run train_model.py to train the model. You can adjust parameters like tree depth, etc., to tune it. This outputs a .pkl file
+5. Use run_ai_tracker to load the .pkl model and see the output
+
+Sidenote: Apparently we can do this directly on the Arduino since the "ML" is really just a big decision tree, but that doesn't seem necessary quite yet.
