@@ -1,0 +1,9 @@
+{
+  "additionalFiles": "../../..,../..,../..",
+  "compiler.optimization_flags": "-Os",
+  "customBuildProperties": "",
+  "fqbn": "esp32:esp32:esp32",
+  "hardwareFolders": "/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7,/home/choafe/.arduino15/packages/esp32/hardware/esp32/3.3.7",
+  "otherLibrariesFolders": "/home/choafe/Arduino/libraries",
+  "sketchLocation": "/home/choafe/Arduino/UWB-TWR-Arudino/v3/nlos"
+}
