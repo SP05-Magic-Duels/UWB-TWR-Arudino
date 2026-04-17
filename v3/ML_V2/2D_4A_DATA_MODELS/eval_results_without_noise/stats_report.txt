@@ -1,0 +1,9 @@
+======================================================================
+ UWB PER-ANCHOR AI PERFORMANCE REPORT - 2026-04-16 23:12:10
+======================================================================
+
+--- GLOBAL SYSTEM STATS ---
+Global_Raw_RMSE_meters: nan
+Global_AI_RMSE_meters:  nan
+Global_Error_Reduction_Percent: nan%
+======================================================================
