@@ -6,9 +6,9 @@ import time
 # --- CONFIGURATION ---
 SERIAL_PORT = 'COM3'
 BAUD_RATE = 115200
-CSV_FILENAME = 'training_data_WIDER_4A_100sam.csv'
+CSV_FILENAME = 'training_data_WIDER_TWIST_4A_100sam.csv'
 NUM_ANCHORS = 4  # Set this to 2, 4, etc.
-SAMPLES_PER_POINT = 100  # Set how many samples to take at each location
+SAMPLES_PER_POINT = 500  # Set how many samples to take at each location
 # ---------------------
 
 def main():

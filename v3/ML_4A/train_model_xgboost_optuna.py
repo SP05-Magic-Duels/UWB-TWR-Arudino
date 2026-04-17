@@ -7,14 +7,14 @@ import os
 # =============================================================================
 #  CHOOSE YOUR MODEL — comment out the one you don't want
 # =============================================================================
-# MODEL_BACKEND = "random_forest"
-MODEL_BACKEND = "xgboost_optuna"
+MODEL_BACKEND = "random_forest"
+# MODEL_BACKEND = "xgboost_optuna"
 
 # =============================================================================
 #  CONFIGURATION
 # =============================================================================
-CSV_FILENAME    = 'training_data_WIDER_4A_100sam.csv'
-MODEL_FILENAME  = 'uwb_xgboost_optuna_WIDER_4A_100sam.pkl'
+CSV_FILENAME    = 'training_data_WIDER_TWIST_4A_100sam.csv'
+MODEL_FILENAME  = 'uwb_random_forest_WIDER_TWIST_NEG_4A_100sam.pkl'
 
 # XGBoost + Optuna settings (ignored when using random_forest)
 OPTUNA_TRIALS   = 100       # More trials = better tuning, but slower

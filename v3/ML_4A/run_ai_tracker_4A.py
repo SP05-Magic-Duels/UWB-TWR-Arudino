@@ -15,7 +15,7 @@ from scipy.optimize import least_squares
 # --- CONFIGURATION ---
 SERIAL_PORT = 'COM3' 
 BAUD_RATE = 115200
-MODEL_FILENAME = 'uwb_random_forest_WIDER_4A_100sam.pkl'
+MODEL_FILENAME = 'uwb_random_forest_WIDER_TWIST_4A_100sam.pkl'
 NUM_ANCHORS = 4
 
 # ANCHOR POSITIONS (x, y) in meters
