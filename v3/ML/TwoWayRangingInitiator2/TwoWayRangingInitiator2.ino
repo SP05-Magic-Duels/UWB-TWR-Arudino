@@ -2,8 +2,10 @@
 #include <DW1000NgUtils.hpp>
 #include <DW1000NgTime.hpp>
 #include <DW1000NgConstants.hpp>
+#include <WiFi.h>
+#include <esp_now.h>
 
-#define NUM_ANCHORS 4
+#define NUM_ANCHORS 8
 
 const uint8_t PIN_RST = 27;
 const uint8_t PIN_IRQ = 34;
@@ -41,12 +43,6 @@ float rx_powers[NUM_ANCHORS] = {0};
 float fp_powers[NUM_ANCHORS] = {0};
 float qualities[NUM_ANCHORS] = {0};
 
-// device_configuration_t DEFAULT_CONFIG = {
-//   false, true, true, true, false,
-//   SFDMode::STANDARD_SFD, Channel::CHANNEL_5, DataRate::RATE_6800KBPS,
-//   PulseFrequency::FREQ_64MHZ, PreambleLength::LEN_128, PreambleCode::CODE_9
-// };
-
 device_configuration_t DEFAULT_CONFIG = {
     false, true, true, true, false,
     SFDMode::STANDARD_SFD, Channel::CHANNEL_3, DataRate::RATE_850KBPS,
@@ -57,18 +53,55 @@ interrupt_configuration_t DEFAULT_INTERRUPT_CONFIG = {
   true, true, true, false, true
 };
 
-void printDistances() {
-  for (int i = 0; i < NUM_ANCHORS; i++) {
-    Serial.print(distances[i]);
-    Serial.print(",");
-    Serial.print(rx_powers[i]);
-    Serial.print(",");
-    Serial.print(fp_powers[i]);
-    Serial.print(",");
-    Serial.print(qualities[i]);
-    if (i < NUM_ANCHORS - 1) Serial.print(",");
+// --- ESP-NOW and FreeRTOS Setup ---
+// STREAM TO: D4:D4:DA:5C:4E:08
+uint8_t broadcastAddress[] = {0xD4, 0xD4, 0xDA, 0x5C, 0x4E, 0x08};
+QueueHandle_t espNowQueue;
+#define MAX_PAYLOAD_SIZE 250 // ESP-NOW maximum payload limit
+
+// Task running on Core 0 to handle ESP-NOW broadcasting asynchronously
+void espNowTask(void *pvParameters) {
+  char buffer[MAX_PAYLOAD_SIZE];
+  for(;;) {
+    // Block until a message is available in the queue
+    if (xQueueReceive(espNowQueue, buffer, portMAX_DELAY) == pdTRUE) {
+      esp_now_send(broadcastAddress, (uint8_t *)buffer, strlen(buffer));
+    }
   }
-  Serial.println();
+}
+// ----------------------------------
+
+void printDistances() {
+  char payload[MAX_PAYLOAD_SIZE];
+  int len = 0;
+  
+  // Format the CSV string into the payload buffer
+  for (int i = 0; i < NUM_ANCHORS; i++) {
+    int added = snprintf(payload + len, sizeof(payload) - len, "%.2f,%.2f,%.2f,%.2f", 
+                         distances[i], rx_powers[i], fp_powers[i], qualities[i]);
+    if (added > 0 && added < sizeof(payload) - len) {
+        len += added;
+    } else {
+        break; // Stop to prevent buffer overflow
+    }
+
+    if (i < NUM_ANCHORS - 1) {
+        added = snprintf(payload + len, sizeof(payload) - len, ",");
+        if (added > 0 && added < sizeof(payload) - len) {
+            len += added;
+        } else {
+            break;
+        }
+    }
+  }
+
+  // Output to Serial monitor
+  Serial.println(payload);
+
+  // Send the formatted string to Core 0 task via Queue without blocking Core 1
+  if (espNowQueue != NULL) {
+    xQueueSend(espNowQueue, payload, 0); 
+  }
 }
 
 void gotoIdle() {
@@ -107,10 +140,6 @@ void transmitRange() {
   DW1000Ng::setDelayedTRX(futureTimeBytes);
   timeRangeSent += DW1000Ng::getTxAntennaDelay();
 
-  // FIX: Timestamps now packed starting at data+2 (after the 2-byte header).
-  // Previously data+1 overlapped with data[1] (the anchor ID byte), causing the
-  // responder to read a corrupted anchorId and garbage timestamps, which triggered
-  // the DW1000 internal checksum failure / core dump on the responder side.
   DW1000NgUtils::writeValueToBytes(data + 2,  timePollSent,        LENGTH_TIMESTAMP);
   DW1000NgUtils::writeValueToBytes(data + 7,  timePollAckReceived, LENGTH_TIMESTAMP);
   DW1000NgUtils::writeValueToBytes(data + 12, timeRangeSent,       LENGTH_TIMESTAMP);
@@ -121,6 +150,41 @@ void transmitRange() {
 
 void setup() {
   Serial.begin(115200);
+
+  // --- Initialize WiFi and ESP-NOW ---
+  WiFi.mode(WIFI_STA);
+  if (esp_now_init() != ESP_OK) {
+    Serial.println("Error initializing ESP-NOW");
+    return;
+  }
+
+  esp_now_peer_info_t peerInfo;
+  memset(&peerInfo, 0, sizeof(peerInfo));
+  memcpy(peerInfo.peer_addr, broadcastAddress, 6);
+  peerInfo.channel = 0;
+  peerInfo.encrypt = false;
+  
+  if (esp_now_add_peer(&peerInfo) != ESP_OK) {
+    Serial.println("Failed to add peer");
+    return;
+  }
+
+  // Create the Queue (Capacity: 10 messages, Max size: 250 bytes each)
+  espNowQueue = xQueueCreate(10, MAX_PAYLOAD_SIZE);
+
+  // Create task pinned to Core 0 (PRO_CPU) to handle wireless transmission
+  xTaskCreatePinnedToCore(
+    espNowTask,     // Task function
+    "espNowTask",   // Name of task
+    4096,           // Stack size of task
+    NULL,           // Parameter of the task
+    1,              // Priority of the task
+    NULL,           // Task handle
+    0               // Core assignment (0)
+  );
+  // -----------------------------------
+
+  // DW1000 Initialization
   DW1000Ng::initialize(PIN_SS, PIN_IRQ, PIN_RST);
   DW1000Ng::applyConfiguration(DEFAULT_CONFIG);
   DW1000Ng::applyInterruptConfiguration(DEFAULT_INTERRUPT_CONFIG);
@@ -133,6 +197,7 @@ void setup() {
 }
 
 void loop() {
+  // The default loop() inherently runs on Core 1 (APP_CPU)
   if (currentState == IDLE) {
     if (millis() - idleTimer >= IDLE_DELAY_MS) {
       currentState = POLLING;
@@ -153,8 +218,6 @@ void loop() {
 
   if (sentAck) {
     sentAck = false;
-    // Capture POLL transmit timestamp immediately after the POLL is sent,
-    // before any new TX (transmitRange) can overwrite the hardware register.
     if (expectedMsgId == POLL_ACK) {
       timePollSent = DW1000Ng::getTransmitTimestamp();
     }
@@ -180,9 +243,6 @@ void loop() {
     }
     else if (msgId == RANGE_REPORT) {
       float curRange;
-      // FIX: Receive raw distance directly (metres); no DISTANCE_OF_RADIO_INV
-      // division needed here. Previously the responder multiplied by the factor
-      // and the initiator divided by it, double-applying the conversion.
       memcpy(&curRange, data + 2, 4);
       distances[current_anchor - 1] = curRange;
       memcpy(&rx_powers[current_anchor - 1], data + 6,  4);
