@@ -1,0 +1,36 @@
+======================================================================
+ UWB INTENSIVE SYSTEM EVALUATION - 2026-04-17 01:22
+ Dataset: with_noise.csv | Samples: 500
+======================================================================
+
+--- 1. OVERALL 2D POSITIONING (X,Y) STATS ---
+ Mean 2D Error:   0.2222 meters
+ Median 2D Error: 0.2152 meters
+ CE90 (90% Acc.): 0.3193 meters  <-- (Industry Standard Metric)
+ Max 2D Error:    0.4357 meters
+
+--- 2. PER-ANCHOR DISTANCE PIPELINE (Raw -> AI -> Filtered) ---
+ ANCHOR A0:
+  Raw RMSE:      0.1794 m
+  AI RMSE:       0.2003 m
+  Filtered RMSE: 0.1981 m
+  > Pipeline Improvement: -10.45%
+
+ ANCHOR A1:
+  Raw RMSE:      0.4231 m
+  AI RMSE:       0.4109 m
+  Filtered RMSE: 0.4101 m
+  > Pipeline Improvement: 3.09%
+
+ ANCHOR A2:
+  Raw RMSE:      0.1384 m
+  AI RMSE:       0.1160 m
+  Filtered RMSE: 0.1117 m
+  > Pipeline Improvement: 19.28%
+
+ ANCHOR A3:
+  Raw RMSE:      0.1555 m
+  AI RMSE:       0.1860 m
+  Filtered RMSE: 0.1793 m
+  > Pipeline Improvement: -15.31%
+

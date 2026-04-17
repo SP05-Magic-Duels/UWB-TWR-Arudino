@@ -1,0 +1,55 @@
+===========================================================================
+ UWB ULTIMATE SYSTEM EVALUATION - 2026-04-17 03:14
+===========================================================================
+
+ [GLOBAL SYSTEM ANALYSIS | Total Samples: 1000]
+
+---------------------------------------------------------------------------
+ >>> TOTAL SYSTEM PERFORMANCE (LOS + NLOS) <<<
+---------------------------------------------------------------------------
+
+--- 1. OVERALL 2D POSITIONING (X,Y) STATS ---
+ Mean 2D Error:    0.2247 meters
+ Median 2D Error:  0.2286 meters
+ CE90 (90% Acc.):  0.3021 meters
+ Max 2D Error:     0.4357 meters
+ Mean X-Axis Error:0.1102 meters
+ Mean Y-Axis Error:0.1744 meters
+ System R² (X):    0.9772
+ System R² (Y):    0.7565
+ System R² (Total):0.9394
+
+ [Loaded Dataset: without_noise.csv | Samples: 500]
+
+---------------------------------------------------------------------------
+ >>> CLEAN BASELINE DATASET (NO NOISE) <<<
+---------------------------------------------------------------------------
+
+--- 1. OVERALL 2D POSITIONING (X,Y) STATS ---
+ Mean 2D Error:    0.2273 meters
+ Median 2D Error:  0.2321 meters
+ CE90 (90% Acc.):  0.2981 meters
+ Max 2D Error:     0.3334 meters
+ Mean X-Axis Error:0.1001 meters
+ Mean Y-Axis Error:0.1866 meters
+ System R² (X):    0.9834
+ System R² (Y):    0.7152
+ System R² (Total):0.9375
+
+ [Loaded Dataset: with_noise.csv | Samples: 500]
+
+---------------------------------------------------------------------------
+ >>> NLOS DATASET (WITH NOISE) <<<
+---------------------------------------------------------------------------
+
+--- 1. OVERALL 2D POSITIONING (X,Y) STATS ---
+ Mean 2D Error:    0.2222 meters
+ Median 2D Error:  0.2152 meters
+ CE90 (90% Acc.):  0.3193 meters
+ Max 2D Error:     0.4357 meters
+ Mean X-Axis Error:0.1202 meters
+ Mean Y-Axis Error:0.1622 meters
+ System R² (X):    0.9710
+ System R² (Y):    0.7947
+ System R² (Total):0.9412
+
