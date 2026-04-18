@@ -15,28 +15,28 @@ os.environ['PYTHONWARNINGS'] = 'ignore'
 # --- CONFIGURATION ---
 SERIAL_PORT = 'COM3' 
 BAUD_RATE = 115200
-MODEL_FILENAME = '3D_DATA_MODELS/MODELS/random_forest_8A_100sam.pkl'
-CSV_FILENAME = '3D_DATA_MODELS/DATA/random_forest_8A_100sam.csv'
+MODEL_FILENAME = '3D_DATA_MODELS/MODELS/WITH_NOISE_8A_100sam.pkl'
+CSV_FILENAME = '3D_DATA_MODELS/DATA/random_forest_8A_100sam_WITHOUT_NOISE_Z.csv'
 NUM_ANCHORS = 8
 SAMPLES_PER_POINT = 100  # <--- Set exactly how many samples to take per location
 
 # OPTIONS:
 SOLVER_TYPE = "nonlinear"  # "linear" or "nonlinear"
-FILTER_TYPE = "kf"         # "kf" (filters distance) or "ekf" (filters x,y position)
+FILTER_TYPE = "kf"         # "kf" (filters distance) or "ekf" (filters x,y,z position)
 
 # EMA CONFIGURATION
 EMA_ALPHA = 0.5
 
-# ANCHOR POSITIONS (x, y) in meters
+# ANCHOR POSITIONS (x, y, z) in meters
 ANCHOR_POSITIONS = np.array([
     [3.048,     0.43815,    0.7493],    # A0
     [1.66624,   0.43815,    0.74935],   # A1
-    [0.2032,    0.4064,     0.7366],           # A2
-    [0.2032,    1.6002,     0.7493],         # A3
-    [3.048,     0.43815,    1.3716],      # A4
-    [1.6662,    0.43815,    1.5113],   # A5
-    [0.2032,    0.4064,     1.07315],        # A6
-    [0.2032,    1.6002,     1.42875],        # A7
+    [0.2032,    0.4064,     0.7366],    # A2
+    [0.2032,    1.6002,     0.7493],    # A3
+    [3.048,     0.43815,    1.3716],    # A4
+    [1.6662,    0.43815,    1.5113],    # A5
+    [0.2032,    0.4064,     1.07315],   # A6
+    [0.2032,    1.6002,     1.42875],   # A7
 ])
 
 PROCESS_NOISE = 0.1  
@@ -82,9 +82,10 @@ class KalmanAnchor:
 
 class ExtendedKalmanFilter:
     def __init__(self, q, r, anchor_pos):
-        self.x = np.array([[1.0], [1.0], [0.0], [0.0]]) 
-        self.P = np.eye(4) * 1.0
-        self.Q = np.eye(4) * q
+        # State vector expanded to 6D: [X, Y, Z, dX, dY, dZ]
+        self.x = np.array([[1.0], [1.0], [1.0], [0.0], [0.0], [0.0]]) 
+        self.P = np.eye(6) * 1.0
+        self.Q = np.eye(6) * q
         self.R = np.eye(len(anchor_pos)) * r
         self.anchor_pos = anchor_pos
         self.last_time = time.time()
@@ -93,7 +94,13 @@ class ExtendedKalmanFilter:
         now = time.time()
         dt = max(now - self.last_time, 0.001)
         self.last_time = now
-        F = np.array([[1, 0, dt, 0], [0, 1, 0, dt], [0, 0, 1, 0], [0, 0, 0, 1]])
+        
+        # 6x6 State Transition Matrix for 3D
+        F = np.eye(6)
+        F[0, 3] = dt  # X velocity impacts X position
+        F[1, 4] = dt  # Y velocity impacts Y position
+        F[2, 5] = dt  # Z velocity impacts Z position
+        
         self.x = F @ self.x
         self.P = F @ self.P @ F.T + self.Q
 
@@ -101,30 +108,44 @@ class ExtendedKalmanFilter:
         z = np.array(measurements).reshape(-1, 1)
         hx = []
         for i in range(len(self.anchor_pos)):
-            dist = np.sqrt((self.x[0,0] - self.anchor_pos[i,0])**2 + (self.x[1,0] - self.anchor_pos[i,1])**2)
+            # 3D Distance calculation
+            dist = np.sqrt((self.x[0,0] - self.anchor_pos[i,0])**2 + 
+                           (self.x[1,0] - self.anchor_pos[i,1])**2 + 
+                           (self.x[2,0] - self.anchor_pos[i,2])**2)
             hx.append(dist)
         hx = np.array(hx).reshape(-1, 1)
+        
         H = []
         for i in range(len(self.anchor_pos)):
             dist = max(hx[i, 0], 0.01)
+            # 3D Partial Derivatives (Jacobian)
             dx = (self.x[0,0] - self.anchor_pos[i,0]) / dist
             dy = (self.x[1,0] - self.anchor_pos[i,1]) / dist
-            H.append([dx, dy, 0, 0])
+            dz = (self.x[2,0] - self.anchor_pos[i,2]) / dist
+            H.append([dx, dy, dz, 0, 0, 0])
+            
         H = np.array(H)
         y = z - hx
         S = H @ self.P @ H.T + self.R
         K = self.P @ H.T @ np.linalg.inv(S)
         self.x = self.x + (K @ y)
-        self.P = (np.eye(4) - (K @ H)) @ self.P
-        return self.x[0:2, 0]
+        self.P = (np.eye(6) - (K @ H)) @ self.P
+        
+        # Return X, Y, and Z
+        return self.x[0:3, 0]
 
 def trilaterate_linear(anchor_pos, distances):
-    x0, y0 = anchor_pos[0]; r0 = distances[0]
+    x0, y0, z0 = anchor_pos[0]
+    r0 = distances[0]
     A, B = [], []
     for i in range(1, len(anchor_pos)):
-        xi, yi = anchor_pos[i]; ri = distances[i]
-        A.append([2*(xi - x0), 2*(yi - y0)])
-        B.append(ri**2 - r0**2 - xi**2 - yi**2 + x0**2 + y0**2)
+        xi, yi, zi = anchor_pos[i]
+        ri = distances[i]
+        
+        # Expanded to 3D matrix math
+        A.append([2*(xi - x0), 2*(yi - y0), 2*(zi - z0)])
+        B.append(ri**2 - r0**2 - xi**2 - yi**2 - zi**2 + x0**2 + y0**2 + z0**2)
+        
     pos, _, _, _ = np.linalg.lstsq(np.array(A), -np.array(B), rcond=None)
     return pos
 
@@ -145,7 +166,8 @@ def main_collection_loop():
     if not file_exists:
         with open(CSV_FILENAME, 'w', newline='') as csv_f:
             writer = csv.writer(csv_f)
-            header = ['Timestamp', 'True_X', 'True_Y', 'True_Z', 'Calc_X', 'Calc_Y']
+            # Added Calc_Z to header
+            header = ['Timestamp', 'True_X', 'True_Y', 'True_Z', 'Calc_X', 'Calc_Y', 'Calc_Z']
             for i in range(NUM_ANCHORS):
                 header.extend([f'A{i}_True_Distance', f'A{i}_Raw_Dist', 
                                f'A{i}_RX_Power', f'A{i}_FP_Power', f'A{i}_Quality', 
@@ -194,7 +216,7 @@ def main_collection_loop():
             ema_filters = {i: EMAFilter(EMA_ALPHA) for i in range(NUM_ANCHORS)}
             kf_filters = {i: KalmanAnchor(PROCESS_NOISE, MEASURE_NOISE) for i in range(NUM_ANCHORS)}
             ekf = ExtendedKalmanFilter(PROCESS_NOISE, MEASURE_NOISE, ANCHOR_POSITIONS)
-            current_pos = np.mean(ANCHOR_POSITIONS, axis=0)
+            current_pos = np.mean(ANCHOR_POSITIONS, axis=0) # Starts as 3D mean
 
             # --- START LOGGING SAMPLES ---
             packets_logged = 0
@@ -254,11 +276,11 @@ def main_collection_loop():
                                 else:
                                     current_pos = trilaterate_nonlinear(ANCHOR_POSITIONS, np.array(dists_for_solver), current_pos)
 
-                            # Save to CSV
+                            # Save to CSV (Includes current_pos[2] which is Calc_Z)
                             row = [
                                 time.time(), 
                                 user_true_pos[0], user_true_pos[1], user_true_pos[2], 
-                                current_pos[0], current_pos[1]
+                                current_pos[0], current_pos[1], current_pos[2]
                             ]
                             for i in range(NUM_ANCHORS):
                                 row.extend(anchor_stats[i])

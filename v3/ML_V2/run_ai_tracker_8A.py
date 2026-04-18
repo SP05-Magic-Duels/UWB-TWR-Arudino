@@ -24,7 +24,7 @@ FILTER_TYPE = "kf"         # "kf" (filters distance) or "ekf" (filters x,y posit
 VIZ_MODE = "3d"            # NEW OPTION: "2d" or "3d"
 
 # EMA CONFIGURATION
-EMA_ALPHA = 0.5
+EMA_ALPHA = 0.6
 
 # ANCHOR POSITIONS (x, y, z) in meters
 ANCHOR_POSITIONS = np.array([
@@ -44,8 +44,6 @@ VIZ_ANCHORS = {str(i): tuple(ANCHOR_POSITIONS[i]) for i in range(NUM_ANCHORS)}
 PROCESS_NOISE = 0.1  
 MEASURE_NOISE = 0.05 
 # ---------------------
-
-# ... [EMAFilter, KalmanAnchor, and ExtendedKalmanFilter classes remain unchanged] ...
 
 class EMAFilter:
     def __init__(self, alpha):

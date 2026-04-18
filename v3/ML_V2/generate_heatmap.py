@@ -8,9 +8,9 @@ from datetime import datetime
 # ==========================================
 # CONFIGURATION
 # ==========================================
-OUTPUT_FOLDER = "uwb_final_results"
-CLEAN_DATA_PATH = 'without_noise.csv'
-NOISY_DATA_PATH = 'with_noise.csv'
+OUTPUT_FOLDER = "3D_DATA_MODELS/EVALUATION/heatmaps"
+CLEAN_DATA_PATH = '3D_DATA_MODELS/DATA/RECALCULATED_random_forest_8A_100sam_WITHOUT_NOISE.csv'
+NOISY_DATA_PATH = '3D_DATA_MODELS/DATA/RECALCULATED_random_forest_8A_100sam_WITH_NOISE.csv'
 
 if not os.path.exists(OUTPUT_FOLDER):
     os.makedirs(OUTPUT_FOLDER)

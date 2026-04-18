@@ -1,0 +1,146 @@
+===========================================================================
+ UWB ULTIMATE SYSTEM EVALUATION - 2026-04-17 20:50
+===========================================================================
+
+ [Loaded Baseline Dataset: 3D_DATA_MODELS/DATA/RECALCULATED_random_forest_8A_100sam_WITHOUT_NOISE.csv | Samples: 1000]
+
+---------------------------------------------------------------------------
+ >>> CLEAN BASELINE DATASET (NO NOISE) <<<
+---------------------------------------------------------------------------
+
+--- 1. OVERALL 3D POSITIONING (X,Y,Z) STATS ---
+ Mean 2D Error:    0.4562 meters
+ Median 2D Error:  0.5100 meters
+ CE90 (90% Acc.):  0.7897 meters
+ Max 2D Error:     1.3816 meters
+ Mean X-Axis Error:0.2810 meters
+ Mean Y-Axis Error:0.2755 meters
+ Mean Z-Axis Error:0.4981 meters
+ System R² (X):    0.8298
+ System R² (Y):    -0.5379
+ System R² (Z):    -47.0643
+ System R² (Total):0.3599
+
+--- 2. PER-ANCHOR DISTANCE PIPELINE (Raw vs AI) ---
+ ANCHOR A0:
+  RAW -> MSE: 0.0332 | RMSE: 0.1822m | Variance: 0.0221 | R-Squared: 0.9468
+  AI  -> MSE: 0.0229 | RMSE: 0.1514m | Variance: 0.0224 | R-Squared: 0.9632
+  > Average Noise (STD): RAW = 0.1488m --> AI = 0.1496m
+  > Improvement: Error reduced by 16.87% | Variance reduced by -1.06%
+
+ ANCHOR A1:
+  RAW -> MSE: 0.0224 | RMSE: 0.1495m | Variance: 0.0216 | R-Squared: 0.9648
+  AI  -> MSE: 0.0128 | RMSE: 0.1130m | Variance: 0.0126 | R-Squared: 0.9799
+  > Average Noise (STD): RAW = 0.1468m --> AI = 0.1123m
+  > Improvement: Error reduced by 24.44% | Variance reduced by 41.55%
+
+ ANCHOR A2:
+  RAW -> MSE: 0.0378 | RMSE: 0.1944m | Variance: 0.0364 | R-Squared: 0.9413
+  AI  -> MSE: 0.0272 | RMSE: 0.1650m | Variance: 0.0262 | R-Squared: 0.9577
+  > Average Noise (STD): RAW = 0.1907m --> AI = 0.1617m
+  > Improvement: Error reduced by 15.15% | Variance reduced by 28.06%
+
+ ANCHOR A3:
+  RAW -> MSE: 0.0191 | RMSE: 0.1382m | Variance: 0.0146 | R-Squared: 0.9707
+  AI  -> MSE: 0.0095 | RMSE: 0.0973m | Variance: 0.0079 | R-Squared: 0.9855
+  > Average Noise (STD): RAW = 0.1210m --> AI = 0.0889m
+  > Improvement: Error reduced by 29.61% | Variance reduced by 46.02%
+
+ ANCHOR A4:
+  RAW -> MSE: 0.0179 | RMSE: 0.1338m | Variance: 0.0155 | R-Squared: 0.9722
+  AI  -> MSE: 0.0100 | RMSE: 0.1002m | Variance: 0.0097 | R-Squared: 0.9844
+  > Average Noise (STD): RAW = 0.1247m --> AI = 0.0983m
+  > Improvement: Error reduced by 25.08% | Variance reduced by 37.87%
+
+ ANCHOR A5:
+  RAW -> MSE: 4486812.6040 | RMSE: 2118.2098m | Variance: 4482336.3531 | R-Squared: -7024820.6620
+  AI  -> MSE: 1495355.5539 | RMSE: 1222.8473m | Variance: 1490911.0784 | R-Squared: -2341216.9234
+  > Average Noise (STD): RAW = 2117.1529m --> AI = 1221.0287m
+  > Improvement: Error reduced by 42.27% | Variance reduced by 66.74%
+
+ ANCHOR A6:
+  RAW -> MSE: 0.1418 | RMSE: 0.3766m | Variance: 0.1375 | R-Squared: 0.7979
+  AI  -> MSE: 0.0631 | RMSE: 0.2512m | Variance: 0.0536 | R-Squared: 0.9100
+  > Average Noise (STD): RAW = 0.3708m --> AI = 0.2315m
+  > Improvement: Error reduced by 33.29% | Variance reduced by 61.01%
+
+ ANCHOR A7:
+  RAW -> MSE: 0.1679 | RMSE: 0.4097m | Variance: 0.1604 | R-Squared: 0.7217
+  AI  -> MSE: 0.0692 | RMSE: 0.2631m | Variance: 0.0677 | R-Squared: 0.8853
+  > Average Noise (STD): RAW = 0.4005m --> AI = 0.2602m
+  > Improvement: Error reduced by 35.79% | Variance reduced by 57.80%
+
+ [Loaded Noisy Dataset: 3D_DATA_MODELS/DATA/RECALCULATED_random_forest_8A_100sam_WITH_NOISE.csv | Samples: 1000]
+
+---------------------------------------------------------------------------
+ >>> NLOS DATASET (WITH NOISE) <<<
+---------------------------------------------------------------------------
+
+--- 1. OVERALL 3D POSITIONING (X,Y,Z) STATS ---
+ Mean 2D Error:    0.5021 meters
+ Median 2D Error:  0.4759 meters
+ CE90 (90% Acc.):  0.8065 meters
+ Max 2D Error:     1.6197 meters
+ Mean X-Axis Error:0.2941 meters
+ Mean Y-Axis Error:0.3414 meters
+ Mean Z-Axis Error:0.4217 meters
+ System R² (X):    0.8159
+ System R² (Y):    -0.8349
+ System R² (Z):    -30.2752
+ System R² (Total):0.4332
+
+--- 2. PER-ANCHOR DISTANCE PIPELINE (Raw vs AI) ---
+ ANCHOR A0:
+  RAW -> MSE: 0.0328 | RMSE: 0.1811m | Variance: 0.0285 | R-Squared: 0.9435
+  AI  -> MSE: 0.0326 | RMSE: 0.1805m | Variance: 0.0301 | R-Squared: 0.9439
+  > Average Noise (STD): RAW = 0.1689m --> AI = 0.1734m
+  > Improvement: Error reduced by 0.30% | Variance reduced by -5.46%
+
+ ANCHOR A1:
+  RAW -> MSE: 0.0648 | RMSE: 0.2546m | Variance: 0.0648 | R-Squared: 0.8923
+  AI  -> MSE: 0.0370 | RMSE: 0.1923m | Variance: 0.0358 | R-Squared: 0.9386
+  > Average Noise (STD): RAW = 0.2545m --> AI = 0.1892m
+  > Improvement: Error reduced by 24.48% | Variance reduced by 44.72%
+
+ ANCHOR A2:
+  RAW -> MSE: 0.0515 | RMSE: 0.2270m | Variance: 0.0458 | R-Squared: 0.9133
+  AI  -> MSE: 0.0361 | RMSE: 0.1900m | Variance: 0.0278 | R-Squared: 0.9393
+  > Average Noise (STD): RAW = 0.2139m --> AI = 0.1668m
+  > Improvement: Error reduced by 16.29% | Variance reduced by 39.21%
+
+ ANCHOR A3:
+  RAW -> MSE: 0.0445 | RMSE: 0.2110m | Variance: 0.0403 | R-Squared: 0.9183
+  AI  -> MSE: 0.0173 | RMSE: 0.1316m | Variance: 0.0158 | R-Squared: 0.9682
+  > Average Noise (STD): RAW = 0.2008m --> AI = 0.1258m
+  > Improvement: Error reduced by 37.64% | Variance reduced by 60.77%
+
+ ANCHOR A4:
+  RAW -> MSE: 0.0432 | RMSE: 0.2079m | Variance: 0.0398 | R-Squared: 0.9301
+  AI  -> MSE: 0.0242 | RMSE: 0.1555m | Variance: 0.0242 | R-Squared: 0.9609
+  > Average Noise (STD): RAW = 0.1994m --> AI = 0.1554m
+  > Improvement: Error reduced by 25.20% | Variance reduced by 39.28%
+
+ ANCHOR A5:
+  RAW -> MSE: 0.1277 | RMSE: 0.3574m | Variance: 0.1256 | R-Squared: 0.7859
+  AI  -> MSE: 0.1017 | RMSE: 0.3190m | Variance: 0.0873 | R-Squared: 0.8295
+  > Average Noise (STD): RAW = 0.3544m --> AI = 0.2955m
+  > Improvement: Error reduced by 10.75% | Variance reduced by 30.44%
+
+ ANCHOR A6:
+  RAW -> MSE: 0.1613 | RMSE: 0.4016m | Variance: 0.1600 | R-Squared: 0.7475
+  AI  -> MSE: 0.1054 | RMSE: 0.3246m | Variance: 0.0981 | R-Squared: 0.8350
+  > Average Noise (STD): RAW = 0.4000m --> AI = 0.3132m
+  > Improvement: Error reduced by 19.17% | Variance reduced by 38.68%
+
+ ANCHOR A7:
+  RAW -> MSE: 0.2508 | RMSE: 0.5008m | Variance: 0.2505 | R-Squared: 0.5566
+  AI  -> MSE: 0.1995 | RMSE: 0.4467m | Variance: 0.1870 | R-Squared: 0.6472
+  > Average Noise (STD): RAW = 0.5005m --> AI = 0.4324m
+  > Improvement: Error reduced by 10.80% | Variance reduced by 25.35%
+
+===========================================================================
+ >>> OVERALL COMPARISON: BASELINE VS. NOISE <<<
+===========================================================================
+
+ Mean 2D Error:  Baseline = 0.4562m | Noisy = 0.5021m  --> 10.06% (Worse)
+ CE90 (90% Acc): Baseline = 0.7897m | Noisy = 0.8065m  --> 2.12% (Worse)

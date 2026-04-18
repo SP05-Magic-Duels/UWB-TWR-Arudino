@@ -1,0 +1,20 @@
+UWB SINGLE FILE ANALYSIS — 2026-04-17 20:32:55.921001
+Source: 3D_DATA_MODELS/DATA/RECALCULATED_random_forest_8A_100sam_WITH_NOISE.csv
+============================================================
+
+--- OVERALL POSITIONING ---
+Samples:         1000
+Mean 2D Error:   0.5021 m
+Median 2D Error: 0.4759 m
+CE90 Accuracy:   0.8065 m
+Mean 3D Error:   0.7026 m
+
+--- PER-ANCHOR DISTANCE PERFORMANCE ---
+Anchor A0: RMSE=0.1805m | Bias=+0.0502m | R2=0.9439
+Anchor A1: RMSE=0.1923m | Bias=+0.0340m | R2=0.9386
+Anchor A2: RMSE=0.1900m | Bias=+0.0910m | R2=0.9393
+Anchor A3: RMSE=0.1316m | Bias=+0.0386m | R2=0.9682
+Anchor A4: RMSE=0.1555m | Bias=+0.0046m | R2=0.9609
+Anchor A5: RMSE=0.3190m | Bias=+0.1200m | R2=0.8295
+Anchor A6: RMSE=0.3246m | Bias=-0.0853m | R2=0.8350
+Anchor A7: RMSE=0.4467m | Bias=+0.1119m | R2=0.6472
