@@ -6,7 +6,7 @@ import time
 # --- CONFIGURATION ---
 SERIAL_PORT = 'COM3'
 BAUD_RATE = 115200
-CSV_FILENAME = '3D_DATA_MODELS/DATA/training_data_8A_100sam.csv'
+CSV_FILENAME = '3D_DATA_MODELS/DATA/large_room_data_8A_100sam.csv'
 NUM_ANCHORS = 8  # Set this to 2, 4, etc.
 SAMPLES_PER_POINT = 100  # Set how many samples to take at each location
 # ---------------------

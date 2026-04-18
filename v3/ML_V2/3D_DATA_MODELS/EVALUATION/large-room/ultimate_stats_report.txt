@@ -1,0 +1,48 @@
+===========================================================================
+ UWB ULTIMATE SYSTEM EVALUATION - 2026-04-18 15:40
+===========================================================================
+
+ [Loaded Baseline Dataset: 3D_DATA_MODELS/DATA/eval_WOUT_NOISE_large_room_8A_100sam.csv | Samples: 1000]
+
+---------------------------------------------------------------------------
+ >>> CLEAN BASELINE DATASET (NO NOISE) <<<
+---------------------------------------------------------------------------
+
+--- 1. OVERALL 3D POSITIONING (X,Y,Z) STATS ---
+ Mean 2D Error:    0.3719 meters
+ Median 2D Error:  0.1215 meters
+ CE90 (90% Acc.):  1.5512 meters
+ Max 2D Error:     2.4527 meters
+ Mean X-Axis Error:0.2981 meters
+ Mean Y-Axis Error:0.1117 meters
+ Mean Z-Axis Error:0.1196 meters
+ System R² (X):    0.2142
+ System R² (Y):    0.9651
+ System R² (Z):    -0.2485
+ System R² (Total):0.8367
+
+--- 2. PER-ANCHOR DISTANCE PIPELINE (Raw vs AI) ---
+ ANCHOR A0:
+  RAW -> MSE: 0.0623 | RMSE: 0.2497m | Variance: 0.0522 | R-Squared: 0.8841
+  AI  -> MSE: 320942.6117 | RMSE: 566.5180m | Variance: 318389.9354 | R-Squared: -596394.0331
+  > Average Noise (STD): RAW = 0.2284m --> AI = 564.2605m
+  > Improvement: Error reduced by -226788.85% | Variance reduced by -610291134.28%
+
+ ANCHOR A1:
+  RAW -> MSE: 0.0350 | RMSE: 0.1870m | Variance: 0.0146 | R-Squared: 0.9415
+  AI  -> MSE: 0.0190 | RMSE: 0.1379m | Variance: 0.0114 | R-Squared: 0.9682
+  > Average Noise (STD): RAW = 0.1209m --> AI = 0.1066m
+  > Improvement: Error reduced by 26.28% | Variance reduced by 22.22%
+
+ ANCHOR A2:
+  RAW -> MSE: 0.0385 | RMSE: 0.1961m | Variance: 0.0306 | R-Squared: 0.9392
+  AI  -> MSE: 191513.8757 | RMSE: 437.6230m | Variance: 190645.6094 | R-Squared: -302810.7351
+  > Average Noise (STD): RAW = 0.1750m --> AI = 436.6298m
+  > Improvement: Error reduced by -223054.87% | Variance reduced by -622715456.67%
+
+ ANCHOR A3:
+  RAW -> MSE: 0.0261 | RMSE: 0.1614m | Variance: 0.0064 | R-Squared: 0.9506
+  AI  -> MSE: 0.0046 | RMSE: 0.0676m | Variance: 0.0044 | R-Squared: 0.9913
+  > Average Noise (STD): RAW = 0.0797m --> AI = 0.0664m
+  > Improvement: Error reduced by 58.15% | Variance reduced by 30.64%
+

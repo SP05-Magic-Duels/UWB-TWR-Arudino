@@ -9,9 +9,9 @@ from sklearn.metrics import r2_score, mean_squared_error
 # ==========================================
 # CONFIGURATION - ADJUST THESE VARIABLES
 # ==========================================
-OUTPUT_FOLDER = "3D_DATA_MODELS/EVALUATION/trial1-1"  # Folder for all outputs
-CLEAN_DATA_PATH = '3D_DATA_MODELS/DATA/RECALCULATED_random_forest_8A_100sam_WITHOUT_NOISE.csv'
-NOISY_DATA_PATH = '3D_DATA_MODELS/DATA/RECALCULATED_random_forest_8A_100sam_WITH_NOISE.csv'
+OUTPUT_FOLDER = "3D_DATA_MODELS/EVALUATION/large-room"  # Folder for all outputs
+CLEAN_DATA_PATH = '3D_DATA_MODELS/DATA/eval_WOUT_NOISE_large_room_8A_100sam.csv'
+NOISY_DATA_PATH = '3D_DATA_MODELS/DATA/eval_WITH_NOISE_large_room_8A_100sam.csv'
 # ==========================================
 
 if not os.path.exists(OUTPUT_FOLDER):

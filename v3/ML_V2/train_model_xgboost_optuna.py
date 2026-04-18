@@ -13,8 +13,8 @@ MODEL_BACKEND = "random_forest"
 # =============================================================================
 #  CONFIGURATION
 # =============================================================================
-CSV_FILENAME    = '3D_DATA_MODELS/DATA/WITH_NOISE_8A_100sam.csv'
-MODEL_FILENAME  = '3D_DATA_MODELS/MODELS/WITH_NOISE_8A_100sam.pkl'
+CSV_FILENAME    = '3D_DATA_MODELS/DATA/large_room_data_8A_100sam.csv'
+MODEL_FILENAME  = '3D_DATA_MODELS/MODELS/NOISE_large_room_data_8A_100sam.pkl'
 
 # XGBoost + Optuna settings (ignored when using random_forest)
 OPTUNA_TRIALS   = 100       # More trials = better tuning, but slower
