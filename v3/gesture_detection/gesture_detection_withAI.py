@@ -359,7 +359,10 @@ def tracking_thread():
                 continue
 
             parts = line.split(",")
-            if len(parts) == NUM_ANCHORS * 4:
+            ## Debug
+            print(parts)
+            print(len(parts) == (NUM_ANCHORS * 4 + 6))
+            if len(parts) == (NUM_ANCHORS * 4 + 6):  # +6 for IMU data
                 dists_for_solver = []
 
                 for i in range(NUM_ANCHORS):
