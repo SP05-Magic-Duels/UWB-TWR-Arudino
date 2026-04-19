@@ -27,8 +27,8 @@
           "value": "${workspaceFolder}/main"
         },
         {
-          "label": "calibration",
-          "value": "${workspaceFolder}/calibration"
+          "label": "initiator",
+          "value": "${workspaceFolder}/ML/TwoWayRangingInitiator2"
         }
       ],
       "default": "${workspaceFolder}/main"
