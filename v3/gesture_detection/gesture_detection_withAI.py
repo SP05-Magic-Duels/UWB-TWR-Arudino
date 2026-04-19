@@ -14,7 +14,7 @@ warnings.filterwarnings("ignore", category=UserWarning)
 os.environ['PYTHONWARNINGS'] = 'ignore'
 
 # --- CONFIGURATION ---
-SERIAL_PORT = 'COM5'
+SERIAL_PORT = 'COM13'
 BAUD_RATE = 115200
 MODEL_FILENAME = 'NOISE_large_room_data_8A_100sam.pkl'
 NUM_ANCHORS = 8
@@ -27,14 +27,14 @@ EMA_ALPHA = 0.5
 
 # ANCHOR POSITIONS (x, y, z) in meters
 ANCHOR_POSITIONS = np.array([
-    [3.048,     0.43815,    0.7493],    # A0
-    [1.66624,   0.43815,    0.74935],   # A1
-    [0.2032,    0.4064,     0.7366],    # A2
-    [0.2032,    1.6002,     0.7493],    # A3
-    [3.048,     0.43815,    1.3716],    # A4
-    [1.6662,    0.43815,    1.5113],    # A5
-    [0.2032,    0.4064,     1.07315],   # A6
-    [0.2032,    1.6002,     1.42875],   # A7
+    [1.92024,     4.2164,    0.4699],    # A0
+    [4.3434,     4.2037,    0.46736],   # A1
+    [4.3942,      4.2037,    1.66624],           # A2
+    [1.9685,      4.2291,    1.9177],         # A3
+    [1.78435,     1.2319,    0.47625],      # A4
+    [4.29895,     1.2065,    0.4826],   # A5
+    [4.29926,     1.2065,    1.88595],        # A6
+    [1.7907,      1.2319,    1.75895],        # A7
 ])
 
 PROCESS_NOISE = 0.1
