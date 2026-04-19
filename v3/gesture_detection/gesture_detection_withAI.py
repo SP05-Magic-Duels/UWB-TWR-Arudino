@@ -4,6 +4,7 @@ import serial
 import joblib
 import numpy as np
 import time
+import socket
 import threading
 from scipy.optimize import least_squares
 from fastdtw import fastdtw
@@ -12,6 +13,12 @@ from scipy.spatial.distance import euclidean
 # 1. SILENCE WARNINGS
 warnings.filterwarnings("ignore", category=UserWarning)
 os.environ['PYTHONWARNINGS'] = 'ignore'
+
+
+# --- UNITY NETWORK CONFIGURATION ---
+UNITY_HOST = "172.20.10.2" # ⚠️ CHANGE THIS to the second laptop's IP address
+UNITY_PORT = 65432
+
 
 # --- CONFIGURATION ---
 SERIAL_PORT = 'COM13'
@@ -130,6 +137,36 @@ def trilaterate_nonlinear(anchor_pos, distances, last_guess):
         return np.linalg.norm(anchor_pos - guess, axis=1) - distances
     res = least_squares(residuals, last_guess, args=(anchor_pos, distances), method='lm')
     return res.x
+
+# --- NETWORK COMMUNICATION ---
+def send_spell_to_unity(spell_name):
+    # Map the recognized spell name from your templates to Unity's expected format
+    spell_map = {
+        "fireball": "F",
+        "lightning": "L",
+        "heal": "H"
+        # Add more mappings here if you add more templates later
+    }
+    
+    spell_char = spell_map.get(spell_name.lower())
+    
+    if not spell_char:
+        print(f"⚠️  Spell '{spell_name}' is not mapped to a Unity command yet.")
+        return
+
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            # Add a 2-second timeout so the thread doesn't freeze if Unity is off
+            s.settimeout(2.0) 
+            s.connect((UNITY_HOST, UNITY_PORT))
+            s.sendall(spell_char.encode())
+            print(f"⚡ Successfully sent to Unity: {spell_char} ({spell_name})")
+    except ConnectionRefusedError:
+        print("⚠️ Unity is not running or the server on the second laptop is not started.")
+    except socket.timeout:
+        print("⚠️ Connection to Unity timed out. Double-check the IP address and ensure both laptops are on the same Wi-Fi.")
+    except Exception as e:
+        print(f"⚠️ Network error: {e}")
 
 # --- SPELL DETECTION ---
 
@@ -289,6 +326,10 @@ def keypress_thread():
             feats = extract_features(data_snapshot)
             spell = classify_spell(feats)
             print(f"Result: {spell}")
+
+            if spell not in ["Unknown", "No Templates Found"]:
+                send_spell_to_unity(spell)
+
         else:
             print("Too short - no classification attempted.")
 
