@@ -4,59 +4,58 @@ import serial
 import joblib
 import numpy as np
 import time
+import socket
 import threading
-import sys
 from scipy.optimize import least_squares
 from fastdtw import fastdtw
 from scipy.spatial.distance import euclidean
-from imu_visualize import LocationVisualizer
 
 # 1. SILENCE WARNINGS
 warnings.filterwarnings("ignore", category=UserWarning)
 os.environ['PYTHONWARNINGS'] = 'ignore'
 
+
+# --- UNITY NETWORK CONFIGURATION ---
+UNITY_HOST = "172.20.10.2" # ⚠️ CHANGE THIS to the second laptop's IP address
+UNITY_PORT = 65432
+
+
 # --- CONFIGURATION ---
-SERIAL_PORT = '/dev/ttyUSB0' 
+SERIAL_PORT = 'COM13'
 BAUD_RATE = 115200
 MODEL_FILENAME = 'NOISE_large_room_data_8A_100sam.pkl'
 NUM_ANCHORS = 8
 
-# OPTIONS:
 SOLVER_TYPE = "nonlinear"  # "linear" or "nonlinear"
-FILTER_TYPE = "kf"         # "kf" (filters distance) or "ekf" (filters x,y position)
-VIZ_MODE = "3d"            # "2d" or "3d"
-DEBUG_MODE = False         # True to see print statements, False to hide them
-USE_IMU_DATA = False       # <-- TOGGLE: Set to False to ignore IMU data entirely
+FILTER_TYPE = "kf"         # "kf" or "ekf"
 
-# EMA CONFIGURATION
+USE_IMU_DATA = False
+
+# EMA CONFIGURATION (for raw distance smoothing inside tracker, unchanged)
 EMA_ALPHA = 0.6
 
 # ANCHOR POSITIONS (x, y, z) in meters
 ANCHOR_POSITIONS = np.array([
-    [1.92024,     4.2164,    0.4699],    # A0
-    [4.3434,      4.2037,    0.46736],   # A1
-    [4.3942,      4.2037,    1.66624],   # A2
-    [1.9685,      4.2291,    1.9177],    # A3
-    [1.78435,     1.2319,    0.47625],   # A4
-    [4.29895,     1.2065,    0.4826],    # A5
-    [4.29926,     1.2065,    1.88595],   # A6
-    [1.7907,      1.2319,    1.75895],   # A7
+    [1.92024,     4.2164,    0.4699],           # A0
+    [4.3434,      4.2037,    0.46736],          # A1
+    [4.3942,      4.2037,    1.66624],          # A2
+    [1.9685,      4.2291,    1.9177],           # A3
+    [1.78435,     1.2319,    0.47625],          # A4
+    [4.29895,     1.2065,    0.4826],           # A5
+    [4.29926,     1.2065,    1.88595],          # A6
+    [1.7907,      1.2319,    1.75895],          # A7
 ])
 
-# For the visualizer, we maintain the Z from ANCHOR_POSITIONS
-VIZ_ANCHORS = {str(i): tuple(ANCHOR_POSITIONS[i]) for i in range(NUM_ANCHORS)}
-
-PROCESS_NOISE = 0.1  
-MEASURE_NOISE = 0.05 
+PROCESS_NOISE = 0.1
+MEASURE_NOISE = 0.05
 
 # --- SPELL DETECTION CONFIGURATION ---
+START_THRESHOLD = 1.0   # velocity in m/s to trigger recording
+STOP_THRESHOLD  = 0.2   # velocity in m/s to end recording
+COOLDOWN_TIME   = 2.0   # seconds between spells
+
 TEMPLATE_DIR    = "templates/"
 NORM_STATS_FILE = "templates/norm_stats.npy"
-
-# --- SHARED STATE ---
-_is_recording      = False
-_active_spell_data = []
-_recording_lock    = threading.Lock()
 
 # ---------------------
 
@@ -96,7 +95,7 @@ class KalmanAnchor:
 
 class ExtendedKalmanFilter:
     def __init__(self, q, r, anchor_pos):
-        self.x = np.array([[1.0], [1.0], [1.0], [0.0], [0.0], [0.0]]) # x, y, z, vx, vy, vz
+        self.x = np.array([[1.0], [1.0], [1.0], [0.0], [0.0], [0.0]])
         self.P = np.eye(6) * 1.0
         self.Q = np.eye(6) * q
         self.R = np.eye(len(anchor_pos)) * r
@@ -124,6 +123,19 @@ class ExtendedKalmanFilter:
         self.x = self.x + (K @ y)
         self.P = (np.eye(6) - (K @ H)) @ self.P
         return self.x[0:3, 0]
+    
+class IMUKalmanFilter:
+    def __init__(self, process_variance, measurement_variance, initial_value=0.0):
+        self.Q = process_variance
+        self.R = measurement_variance
+        self.x = initial_value
+        self.P = 1.0
+    def update(self, measurement):
+        self.P = self.P + self.Q
+        K = self.P / (self.P + self.R)
+        self.x = self.x + K * (measurement - self.x)
+        self.P = (1 - K) * self.P
+        return self.x
 
 def trilaterate_linear(anchor_pos, distances):
     x0, y0, z0 = anchor_pos[0]; r0 = distances[0]
@@ -141,9 +153,44 @@ def trilaterate_nonlinear(anchor_pos, distances, last_guess):
     res = least_squares(residuals, last_guess, args=(anchor_pos, distances), method='lm')
     return res.x
 
-# --- SPELL DETECTION LOGIC ---
+# --- NETWORK COMMUNICATION ---
+def send_spell_to_unity(spell_name):
+    # Map the recognized spell name from your templates to Unity's expected format
+    spell_map = {
+        "fireball": "F",
+        "lightning": "L",
+        "heal": "H"
+        # Add more mappings here if you add more templates later
+    }
+    
+    spell_char = spell_map.get(spell_name.lower())
+    
+    if not spell_char:
+        print(f"⚠️  Spell '{spell_name}' is not mapped to a Unity command yet.")
+        return
+
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            # Add a 2-second timeout so the thread doesn't freeze if Unity is off
+            s.settimeout(2.0) 
+            s.connect((UNITY_HOST, UNITY_PORT))
+            s.sendall(spell_char.encode())
+            print(f"⚡ Successfully sent to Unity: {spell_char} ({spell_name})")
+    except ConnectionRefusedError:
+        print("⚠️ Unity is not running or the server on the second laptop is not started.")
+    except socket.timeout:
+        print("⚠️ Connection to Unity timed out. Double-check the IP address and ensure both laptops are on the same Wi-Fi.")
+    except Exception as e:
+        print(f"⚠️ Network error: {e}")
+
+# --- SPELL DETECTION ---
 
 def extract_features(timed_coords):
+    """
+    Extract features using real dt between points.
+    Features: speed (gesture-normalized), curvature, verticality, turn_magnitude
+    timed_coords: list of (position_array, timestamp) tuples
+    """
     positions  = np.array([pt for pt, _ in timed_coords])
     timestamps = np.array([t  for _, t  in timed_coords])
 
@@ -166,13 +213,18 @@ def extract_features(timed_coords):
             cos_theta = np.dot(v_prev, v_curr) / (mag_p * mag_c)
             curvature = np.arccos(np.clip(cos_theta, -1.0, 1.0))
 
+        # Z is now reliable so verticality is back
         verticality = v_curr[2] / (speed + 1e-5)
+
+        # Full 3D cross product magnitude -- rotation invariant, always positive
         turn_magnitude = np.linalg.norm(np.cross(v_prev, v_curr))
 
         speeds.append(speed)
         features.append([speed, curvature, verticality, turn_magnitude])
 
     features = np.array(features)
+
+    # Gesture-level speed normalization
     mean_speed = np.mean(speeds)
     if mean_speed > 1e-5:
         features[:, 0] /= mean_speed
@@ -190,11 +242,11 @@ def apply_feature_normalization(features, mean, std):
 
 def classify_spell(user_features):
     if not os.path.exists(TEMPLATE_DIR):
-        return "No Templates Found (Directory missing)"
+        return "No Templates Found"
 
     norm_mean, norm_std = load_norm_stats()
     if norm_mean is None:
-        pass # Optional: Print warning
+        print("⚠️  Warning: norm_stats.npy not found. Continuing without feature normalization.")
     else:
         user_features = apply_feature_normalization(user_features, norm_mean, norm_std)
 
@@ -220,7 +272,6 @@ def classify_spell(user_features):
     if not spell_best:
         return "No Templates Found"
 
-    print("\n--- Match Results ---")
     for spell_name, d in sorted(spell_best.items(), key=lambda x: x[1]):
         indicator = " <--- WINNER" if d == min(spell_best.values()) else ""
         print(f"  Spell: {spell_name:15} | Distance: {d:8.2f}{indicator}")
@@ -236,22 +287,43 @@ def classify_spell(user_features):
 
     return best_spell if min_dist < 100 else "Unknown"
 
+# --- SHARED STATE ---
+
+# Position state: written by tracking_thread, read by main loop
+_latest_pos  = None
+_latest_time = None
+_pos_lock    = threading.Lock()
+
+# Recording state: written by keypress_thread, read by main loop
+_is_recording      = False
+_active_spell_data = []
+_recording_lock    = threading.Lock()
+
 # --- KEY-PRESS THREAD ---
 
 def keypress_thread():
+    """
+    ENTER to start recording, ENTER to stop and classify.
+    After stopping, stdin is flushed so the stop keypress cannot
+    bleed into the next start prompt and trigger a double-classification.
+    """
     global _is_recording, _active_spell_data
+    import sys
     while True:
-        input("\n[GESTURE] Press ENTER to start recording...")
+        input("\nPress ENTER to start recording...")
         with _recording_lock:
-            _active_spell_data.clear()
+            _active_spell_data.clear()   # clear in-place, don't rebind
             _is_recording = True
-        print("[GESTURE] Recording... (press ENTER to stop and classify)")
+        print("Recording... (press ENTER to stop and classify)")
 
         input()
         with _recording_lock:
             _is_recording = False
             data_snapshot = list(_active_spell_data)
 
+        # Flush buffered stdin so the stop ENTER does not immediately
+        # satisfy the next start prompt. Works on Linux/Mac; graceful
+        # fallback on Windows.
         try:
             import termios
             termios.tcflush(sys.stdin, termios.TCIFLUSH)
@@ -261,100 +333,91 @@ def keypress_thread():
         if len(data_snapshot) > 1:
             duration = data_snapshot[-1][1] - data_snapshot[0][1]
             rate = len(data_snapshot) / duration if duration > 0 else 0
-            print(f"\n[GESTURE] Stopped. Captured {len(data_snapshot)} fixes over {duration:.1f}s ({rate:.1f} fixes/sec)")
+            print(f"\nStopped. Captured {len(data_snapshot)} fixes over {duration:.1f}s ({rate:.1f} fixes/sec)")
         else:
-            print(f"\n[GESTURE] Stopped. Captured {len(data_snapshot)} fixes.")
+            print(f"\nStopped. Captured {len(data_snapshot)} fixes.")
 
         if len(data_snapshot) > 5:
             feats = extract_features(data_snapshot)
             spell = classify_spell(feats)
-            print(f">>> FINAL CLASSIFICATION: {spell} <<<")
+            print(f"Result: {spell}")
+
+            if spell not in ["Unknown", "No Templates Found"]:
+                send_spell_to_unity(spell)
+
         else:
-            print("[GESTURE] Recording too short - no classification attempted.")
+            print("Too short - no classification attempted.")
 
 # --- TRACKING THREAD ---
 
-def tracking_thread(viz_obj):
-    global _is_recording, _active_spell_data
-    
-    print(f"--- UWB AI Tracker: {FILTER_TYPE.upper()} + {SOLVER_TYPE.upper()} + EMA + {VIZ_MODE.upper()} ---")
-    print(f"--- IMU DATA: {'ENABLED' if USE_IMU_DATA else 'DISABLED'} ---")
+def tracking_thread():
+    global _latest_pos, _latest_time
+
+    print(f"--- UWB Spell Tracker: {FILTER_TYPE.upper()} + {SOLVER_TYPE.upper()} ---")
     try:
         ai_model = joblib.load(MODEL_FILENAME)
         ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=0.01)
         ser.reset_input_buffer()
-        
+
         ema_filters = {i: EMAFilter(EMA_ALPHA) for i in range(NUM_ANCHORS)}
-        kf_filters = {i: KalmanAnchor(PROCESS_NOISE, MEASURE_NOISE) for i in range(NUM_ANCHORS)}
+        kf_filters  = {i: KalmanAnchor(PROCESS_NOISE, MEASURE_NOISE) for i in range(NUM_ANCHORS)}
         ekf = ExtendedKalmanFilter(PROCESS_NOISE, MEASURE_NOISE, ANCHOR_POSITIONS)
+
+        current_pos = np.mean(ANCHOR_POSITIONS, axis=0)
+    
+        # IMU Kalman Filters
+        kf_ax = IMUKalmanFilter(0.001, 0.1, 0.0); kf_ay = IMUKalmanFilter(0.001, 0.1, 0.0); kf_az = IMUKalmanFilter(0.001, 0.1, 1.0)
+        kf_gx = IMUKalmanFilter(0.1, 10.0, 0.0);  kf_gy = IMUKalmanFilter(0.1, 10.0, 0.0);  kf_gz = IMUKalmanFilter(0.1, 10.0, 0.0)
         
         current_pos = np.mean(ANCHOR_POSITIONS, axis=0)
 
         while True:
-            if ser.in_waiting > 100: ser.reset_input_buffer()
+            if ser.in_waiting > 100:
+                ser.reset_input_buffer()
+
             line = ser.readline().decode('utf-8', errors='ignore').strip()
-            if not line: continue
-            
-            if DEBUG_MODE:
-                print(f"\n[DEBUG] RAW SERIAL INPUT: {line}")
-            
+            if not line:
+                continue
+
             parts = line.split(",")
-            
-            # Check if we at least have standard UWB data
-            if len(parts) >= (NUM_ANCHORS * 4):
+            if len(parts) >= (NUM_ANCHORS * 4):  # +6 for IMU data
+                dists_for_solver = []
                 
-                imu_accel = None
-                imu_gyro = None
-                
-                # 1. PARSE IMU DATA (If toggle is ON and data is present)
                 if USE_IMU_DATA and len(parts) >= (NUM_ANCHORS * 4) + 6:
                     imu_offset = NUM_ANCHORS * 4
                     try:
-                        ax = float(parts[imu_offset])
-                        ay = float(parts[imu_offset+1])
-                        az = float(parts[imu_offset+2])
-                        gx = float(parts[imu_offset+3])
-                        gy = float(parts[imu_offset+4])
-                        gz = float(parts[imu_offset+5])
+                        ax = kf_ax.update(float(parts[imu_offset]))
+                        ay = kf_ay.update(float(parts[imu_offset+1]))
+                        az = kf_az.update(float(parts[imu_offset+2]))
+                        gx = kf_gx.update(float(parts[imu_offset+3]))
+                        gy = kf_gy.update(float(parts[imu_offset+4]))
+                        gz = kf_gz.update(float(parts[imu_offset+5]))
                         
                         imu_accel = np.array([ax, ay, az])
                         imu_gyro = np.array([gx, gy, gz])
-                        
-                        if DEBUG_MODE:
-                            print(f"  [DEBUG] IMU Parsed -> Accel: ({ax:.2f}, {ay:.2f}, {az:.2f}) | Gyro: ({gx:.2f}, {gy:.2f}, {gz:.2f})")
-                    except ValueError:
-                        if DEBUG_MODE:
-                            print("  [DEBUG] Failed to parse IMU data. Ignoring IMU for this frame.")
+                    except:
+                        imu_accel, imu_gyro = np.array([np.nan, np.nan, np.nan])
 
-                # 2. PARSE UWB DATA
-                dists_for_solver = []
-                display_ranges = {}
-                
+                # PARSE UWB DATA
                 for i in range(NUM_ANCHORS):
                     idx = i * 4
                     try:
                         chunk = parts[idx : idx+4]
                         raw = float(chunk[0])
                         smoothed_raw = ema_filters[i].update(raw)
-                        feat = np.array([[i, smoothed_raw, float(chunk[1]), float(chunk[2]), abs(float(chunk[1])-float(chunk[2])), float(chunk[3])]])
+                        feat = np.array([[i, smoothed_raw, float(chunk[1]), float(chunk[2]),
+                                          abs(float(chunk[1])-float(chunk[2])), float(chunk[3])]])
                         ai_corr = smoothed_raw + ai_model.predict(feat)[0]
-                        
+
                         dist_final = ai_corr
                         if FILTER_TYPE == "kf":
                             dist_final = kf_filters[i].update(dist_final)
-                            
-                        dists_for_solver.append(dist_final)
-                        display_ranges[str(i)] = dist_final
-                        
-                        if DEBUG_MODE:
-                            print(f"  [DEBUG] A{i}: Raw={raw:5.2f}m -> EMA={smoothed_raw:5.2f}m -> AI={ai_corr:5.2f}m -> Final={dist_final:5.2f}m")
-                            
-                    except Exception as e: 
-                        dists_for_solver.append(np.nan)
-                        if DEBUG_MODE:
-                            print(f"  [DEBUG] A{i}: ERROR parsing UWB chunk: {e}")
 
-                # 3. COMPUTE POSITION
+                        dists_for_solver.append(dist_final)
+                    except:
+                        dists_for_solver.append(np.nan)
+
+                # COMPUTE POS
                 if not any(np.isnan(dists_for_solver)):
                     if FILTER_TYPE == "ekf":
                         ekf.predict()
@@ -364,48 +427,47 @@ def tracking_thread(viz_obj):
                             current_pos = trilaterate_linear(ANCHOR_POSITIONS, np.array(dists_for_solver))
                         else:
                             current_pos = trilaterate_nonlinear(ANCHOR_POSITIONS, np.array(dists_for_solver), current_pos)
-                    
-                    if DEBUG_MODE:
-                        print(f"  [DEBUG] COMPUTED POS -> X: {current_pos[0]:.2f}, Y: {current_pos[1]:.2f}, Z: {current_pos[2]:.2f}")
-                    
-                    # ---> RECORD GESTURE DATA <---
-                    with _recording_lock:
-                        if _is_recording:
-                            _active_spell_data.append((current_pos.copy(), time.time()))
 
-                    # Update Visualizer
-                    viz_obj.update_position(x=current_pos[0], y=current_pos[1], z=current_pos[2], ranges=display_ranges)
-                else:
-                    if DEBUG_MODE:
-                        print("  [DEBUG] Skipping position computation due to NaN values in distance array.")
+                    with _pos_lock:
+                        _latest_pos  = current_pos.copy()
+                        _latest_time = time.time()
 
-    except Exception as e: print(f"Tracking Error: {e}")
+    except Exception as e:
+        print(f"Tracking Error: {e}")
 
 # --- MAIN ---
 
 if __name__ == '__main__':
-    dims = 3 if VIZ_MODE.lower() == "3d" else 2
-    
-    # Define your specific room bounds here
-    X_BOUNDS = (0, 5)
-    Y_BOUNDS = (0, 5)
-    Z_BOUNDS = (0, 5)
-    
-    viz = LocationVisualizer(
-        dimensions=dims, 
-        anchor_positions=VIZ_ANCHORS, 
-        x_lim=X_BOUNDS, 
-        y_lim=Y_BOUNDS, 
-        z_lim=Z_BOUNDS
-    )
-    
-    print("Initializing components...")
-    
-    # 1. Start Tracker (Also handles spell recording locally)
-    threading.Thread(target=tracking_thread, args=(viz,), daemon=True).start()
-    
-    # 2. Start Keypress Listener for Gestures
+    # Start tracker and wait until it's producing positions
+    threading.Thread(target=tracking_thread, daemon=True).start()
+
+    print("Initializing tracker...", end="", flush=True)
+    while True:
+        with _pos_lock:
+            ready = _latest_pos is not None
+        if ready:
+            break
+        time.sleep(0.05)
+    print(" Tracker ready.\n")
+
+    # Start key-press listener
     threading.Thread(target=keypress_thread, daemon=True).start()
-    
-    # 3. Start Visualizer (MUST be in main thread)
-    viz.start()
+
+    # Main loop: feed positions into active_spell_data while recording
+    try:
+        while True:
+            with _pos_lock:
+                pos = _latest_pos
+                ts  = _latest_time
+                if pos is not None:
+                    _latest_pos = None
+
+            if pos is not None:
+                with _recording_lock:
+                    if _is_recording:
+                        _active_spell_data.append((pos, ts))
+
+            time.sleep(0.005)
+
+    except KeyboardInterrupt:
+        print("\nStopping.")
