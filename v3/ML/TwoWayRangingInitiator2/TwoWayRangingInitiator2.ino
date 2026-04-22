@@ -12,7 +12,7 @@
 #define IMU_ADDRESS 0x69  // Adjust to 0x68 if needed
 BMI160 IMU;
 
-// Reference for IMU data structures
+// Reference for IMU data structures (DO NOT UNCOMMENT)
 // struct calData {
 // 	bool valid;
 // 	float accelBias[3];
@@ -25,8 +25,9 @@ calData calib = {
     {1.0f, 0.0f, 1.0f}, 
     {-54.90f, -124.95f, 33.08f}, 
     {0.0f, 0.0f, 0.0f}, 
-    {1.0f, 1.0f, 1.0f} 
+    {0.0f, 0.0f, 0.0f} 
 };
+// calData calib; // Comment the above for calibration
 AccelData accelData;
 GyroData gyroData;
 // -----------
@@ -41,7 +42,7 @@ GyroData gyroData;
 //   IMU x6    : "XX.X,"     = 5 chars x 6 = 30  (%.1f — passthrough only, low priority)
 //   null terminator         =              =  1
 //   ─────────────────────────────────────────────
-//   Total worst case                       = 247 bytes ✅ under ESP-NOW 250 byte limit
+//   Total worst case                       = 247 bytes, under ESP-NOW 250 byte limit
 #define MAX_PAYLOAD_SIZE 250
 
 // --- UWB Variables ---
@@ -92,8 +93,8 @@ interrupt_configuration_t DEFAULT_INTERRUPT_CONFIG = {
 };
 
 // --- ESP-NOW ---
-// STREAM TO: D4:D4:DA:5C:4E:08
-uint8_t broadcastAddress[] = {0xD4, 0xD4, 0xDA, 0x5C, 0x4E, 0x08};
+// STREAM TO: C8:F0:9E:F1:AB:5C
+uint8_t broadcastAddress[] = {0xC8, 0xF0, 0x9E, 0xF1, 0xAB, 0x5C};
 QueueHandle_t espNowQueue;
 
 void espNowTask(void *pvParameters) {
@@ -204,9 +205,9 @@ void setup() {
   } else {
     Serial.println("BMI160 initialized successfully!");
   }
-  // Serial.println("Calibrating IMU... Do not move it.");
-  delay(300); // Allow some time for the IMU to stabilize after initialization
 
+  // Serial.println("Calibrating IMU... Do not move it.");
+  // delay(300); // Allow some time for the IMU to stabilize after initialization
   // IMU.calibrateAccelGyro(&calib);
   // Serial.print("Calibration data - Accel Bias: [");
   // Serial.print(calib.accelBias[0], 2); Serial.print(", ");
