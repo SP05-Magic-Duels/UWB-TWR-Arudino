@@ -57,6 +57,7 @@ NORM_STATS_FILE = "templates/norm_stats.npy"
 
 # ---------------------
 
+
 class EMAFilter:
     def __init__(self, alpha):
         self.alpha = alpha
@@ -266,7 +267,7 @@ def classify_spell(user_features):
     sorted_dists = sorted(spell_best.values())
     if len(sorted_dists) > 1:
         margin = sorted_dists[1] - sorted_dists[0]
-        if margin < 5.0:
+        if margin < 0.0: # Change this to change confidence/unknown boundary
             print(f"⚠️  Ambiguous result (margin: {margin:.2f}), returning Unknown")
             return "Unknown"
 
@@ -360,9 +361,8 @@ def tracking_thread():
 
             parts = line.split(",")
             ## Debug
-            print(parts)
-            print(len(parts) == (NUM_ANCHORS * 4 + 6))
-            if len(parts) == (NUM_ANCHORS * 4 + 6):  # +6 for IMU data
+            # print(len(parts))
+            if len(parts) == (NUM_ANCHORS * 4 + 1): # (NUM_ANCHORS * 4 + 6):  # +6 for IMU data
                 dists_for_solver = []
 
                 for i in range(NUM_ANCHORS):
