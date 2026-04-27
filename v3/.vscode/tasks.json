@@ -13,7 +13,16 @@
         {
           "label": "ESP32 on /dev/ttyUSB1",
           "value": "/dev/ttyUSB1"
+        },
+        {
+          "label": "ESP32 on /dev/ttyUSB2",
+          "value": "/dev/ttyUSB2"
+        },
+        {
+          "label": "ESP32 on /dev/ttyUSB3",
+          "value": "/dev/ttyUSB3"
         }
+        
       ],
       "default": "/dev/ttyUSB0"
     },
