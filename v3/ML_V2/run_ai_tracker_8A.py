@@ -6,14 +6,15 @@ import numpy as np
 import time
 import threading
 from scipy.optimize import least_squares
-from visualize import LocationVisualizer
+# from v3.ML_V2.ARCHIVED.visualize import LocationVisualizer
+from ARCHIVED.visualize import LocationVisualizer
 
 # 1. SILENCE WARNINGS
 warnings.filterwarnings("ignore", category=UserWarning)
 os.environ['PYTHONWARNINGS'] = 'ignore'
 
 # --- CONFIGURATION ---
-SERIAL_PORT = 'COM3' 
+SERIAL_PORT = 'COM9' 
 BAUD_RATE = 115200
 MODEL_FILENAME = '3D_DATA_MODELS/MODELS/NOISE_large_room_data_8A_100sam.pkl'
 NUM_ANCHORS = 8
@@ -28,14 +29,14 @@ EMA_ALPHA = 0.6
 
 # ANCHOR POSITIONS (x, y, z) in meters
 ANCHOR_POSITIONS = np.array([
-    [1.92024,     4.2164,    0.4699],    # A0
-    [4.3434,     4.2037,    0.46736],   # A1
-    [4.3942,      4.2037,    1.66624],           # A2
-    [1.9685,      4.2291,    1.9177],         # A3
-    [1.78435,     1.2319,    0.47625],      # A4
-    [4.29895,     1.2065,    0.4826],   # A5
-    [4.29926,     1.2065,    1.88595],        # A6
-    [1.7907,      1.2319,    1.75895],        # A7
+    [0.84455,     3.91795,    0.4699],      # A0
+    [3.3655,     3.937,    0.46736],        # A1
+    [3.38455,      4.2037,    1.66624],     # A2
+    [1.9685,      3.91795,    1.9177],      # A3
+    [0.83185,     0.9652,    0.47625],      # A4
+    [3.42265,     0.9271,    0.4826],       # A5
+    [3.429,     0.9271,    1.88595],        # A6
+    [0.85725,      0.9652,    1.75895],     # A7
 ])
 
 # For the visualizer, we maintain the Z from ANCHOR_POSITIONS
@@ -145,7 +146,7 @@ def tracking_thread(viz_obj):
             if not line: continue
             
             parts = line.split(",")
-            if len(parts) == NUM_ANCHORS * 4:
+            if len(parts) >= NUM_ANCHORS * 4:
                 dists_for_solver = []
                 display_ranges = {}
                 
